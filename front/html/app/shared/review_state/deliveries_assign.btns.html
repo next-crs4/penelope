@@ -1,0 +1,102 @@
+<button type="button" class="btn btn-default" aria-hidden="true"
+        data-ng-disabled="checked_list.length == 0"
+        data-nq-collapse="" data-target-id="#collapseDeliveryForm" data-collapsed="true">
+    <span class="glyphicon glyphicon-send"></span>&nbsp;Delivery
+</button>
+<div id="collapseDeliveryForm"  class="panel panel-warning" style="margin-top:10px;">
+    <div class="panel-heading">
+        <div class="panel-title">Delivery</div>
+    </div>
+    <div class="panel-body">
+        <div class="col-sm-12 controls">
+            <div class="col-sm-3">
+                <input type="checkbox" ng-model="delivery_params.switchDelivery" data-nq-switch-button=""
+                       data-theme="primary,stripped,rounded"
+                       data-label-text="Delivery" data-false-label="Create new" data-true-label="Add to">
+            </div>
+            <div class="input-inline col-sm-3" data-ng-if="delivery_params.switchDelivery">
+                <select data-nq-select="" data-qo-placeholder="Deliveries..."
+                        data-ng-options="d.title for d in deliveries"
+                        data-ng-model="delivery_params.delivery">
+                </select>
+            </div>
+            <div class="input-inline col-sm-3" data-ng-if="!delivery_params.switchDelivery">
+                            <input type="text"
+
+                                   data-ng-required="true"
+                                   title="batch"
+                                   class="form-control"
+                                   ng-model="delivery_params.title"
+                                   placeholder="Delivery..."/>
+            </div>
+            <div class="input-inline col-sm-6">
+                            <input type="text" class="form-control"
+                                   data-ng-required="true"
+                                   data-ng-disabled="delivery_params.switchDelivery"
+                                   ng-model="delivery_params.description" data-name="description"
+                                   placeholder="Description...">
+            </div>
+        </div>
+        <div class="col-sm-12 controls" style="margin-top:15px">
+
+            <div class="input-inline col-sm-3" >
+                <select data-nq-select=""
+                        data-ng-init="delivery_params.export_mode=_.findWhere(export_mode,{'label':batch.remarks})"
+                        data-qo-placeholder="Delivery Mode..."
+                        data-qo-display-type="input"
+                        data-ng-model="delivery_params.export_mode"
+                        ng-disabled="delivery_params.switchDelivery"
+                        data-ng-options="e.label for e in export_mode" required>
+                </select>
+            </div>
+             <div class="input-inline col-sm-3" >
+                <input type="checkbox" ng-model="delivery_params.switchMerge" data-nq-switch-button=""
+                       data-ng-init="delivery_params.switchMerge=true"
+                       data-theme="primary,stripped,rounded"
+                       data-ng-disabled="delivery_params.switchDelivery"
+                       data-label-text="Merging" data-true-label="Yes" data-false-label="No">
+            </div>
+            <div class="input-inline col-sm-6" >
+                <select data-nq-select=""
+                        data-qo-placeholder="Runs..."
+                        data-qo-display-type="input"
+                        data-ng-model="delivery_params.runs"
+                        data-qo-multiple="true"
+                        data-ng-disabled="runs.length == 0 || delivery_params.switchDelivery"
+                        data-ng-options="r for r in runs">
+                </select>
+            </div>
+
+
+        </div>
+        <div class="col-sm-12 controls" style="margin-top:15px">
+             <div class="input-inline col-sm-6" ng-show="delivery_params.export_mode.label=='MOUNT'">
+                            <input type="text" data-ng-required="true"
+                                   class="form-control"
+                                   data-ng-disabled="delivery_params.switchDelivery"
+                                   ng-model="delivery_params.path"
+                                   placeholder="Path..."/>
+            </div>
+            <div class="input-inline col-sm-4" >
+                <select data-nq-select=""
+
+                        data-qo-placeholder="Recipients..."
+                        data-qo-display-type="input"
+                        data-ng-model="delivery_params.recipients"
+                        data-ng-disabled="delivery_params.switchDelivery"
+                        data-ng-options="c.title for c in contacts">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 controls" style="margin-top:15px">
+            <div class="input-inline col-sm-12 pull-left">
+                <button type="button" class="btn btn-success pull-left" aria-hidden="true"
+
+                        data-ng-disabled="checked_list.length == 0"
+                        ng-click="ctrl.create_delivery(checked_list, delivery_params)">
+                    <span class="glyphicon glyphicon-send"></span>&nbsp; Delivery
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div style="padding-top:10px;" data-ng-app="LabProductsModule" data-ng-controller="LabProductDetailsCtrl as ctrl">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="demoTabset">
+            <div data-nq-tab="" data-heading="{{state.labproduct_id}}">
+                <ng-include src="'app/components/admin/lab_products/lab_product.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+            </div>
+            <div data-nq-tab="" data-heading="Edit">
+                <ng-include src="'app/components/admin/lab_products/lab_product.edit.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+            </div>
+            <!--<div data-nq-tab="" data-heading="Load">-->
+                <!--<ng-include src="'app/components/admin/lab_products/lab_product.load.view.html'"></ng-include>-->
+                <!--<div ng-bind-html="tabParagraph">-->
+
+                <!--</div>-->
+
+            <!--</div>-->
+        </div>
+    </div>
+</div>

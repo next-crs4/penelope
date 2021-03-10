@@ -1,0 +1,19 @@
+<div class="col-sm-12" style="margin-top:10px;">
+    <div class="input-inline col-sm-6">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="glyphicon glyphicon-calendar"></i>&nbsp;Closing
+            </div>
+            <input type="text" ng-model="purchaseorder_params.closing_date" class="form-control"
+                   data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                   placeholder="datepicker" data-ng-required="true" name="closing_date" required>
+        </div>
+    </div>
+    <div class="col-sm-6 input-inline pull-right">
+        <button type="button" class="btn btn-success pull-right"
+                data-ng-click="ctrl.complete(purchaseorder_params)"
+                data-ng-disabled="purchaseorder_params.closing_date == null || ctrl.check_complete()">
+            <span class="glyphicon glyphicon-check"></span>&nbsp;Complete
+        </button>
+    </div>
+</div>

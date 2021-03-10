@@ -1,0 +1,74 @@
+.background {
+    fill: #FFFFFF;
+    fill-opacity: 0.01;
+}
+
+.component {
+    fill: #e1e1e1;
+}
+
+.component .label {
+    font-family: Myriad, "Helvetic Neue", Helvetica, Arial;
+    text-anchor: middle;
+    fill: #0000FF;
+}
+
+.arc {
+    stroke-weight:0.1;
+    fill: #4e8fff;
+}
+
+
+.arc2 {
+    stroke-weight:0.1;
+    fill: #3660b0;
+}
+
+
+.label {
+    font-family:  Myriad, "Helvetic Neue", Helvetica, Arial;
+    text-anchor: middle;
+}
+
+.radial-svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.radial {
+            border-radius: 3px;
+            background: #FFF;
+            color: #000;
+
+
+        }
+
+		#test .arc2 {
+            stroke-weight:0.1;
+            fill: #3660b0;
+        }
+
+        #divSampleDue .arc {
+            stroke-weight: 0.1;
+            fill: #f0a417;
+        }
+
+         #divSampleReceived  .arc {
+            stroke-weight: 0.1;
+            fill: #b00d08;
+        }
+
+        #divToBeVerified .arc {
+            stroke-weight: 0.1;
+            fill: #1d871b;
+        }
+
+        #divVerified .arc {
+            stroke-weight: 0.1;
+            fill: #4e8fff;
+        }
+
+        #divPublished .arc {
+            stroke-weight: 0.1;
+            fill: #cc1;
+        }

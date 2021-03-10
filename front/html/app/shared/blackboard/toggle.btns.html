@@ -1,0 +1,19 @@
+<button type="button"
+        class="btn btn-success"
+        aria-hidden="true"
+        ng-show="ctrl.in_blackboard_page === undefined"
+        data-ng-disabled="checked_list.length == 0"
+        ng-click="ctrl.add_to_blackboard(checked_list)">
+    <span class="glyphicon glyphicon-plus-sign">
+    </span>&nbsp;Add
+    <span class="glyphicon glyphicon-blackboard" ></span>
+</button>
+<button type="button"
+        class="btn btn-danger"
+        aria-hidden="true"
+        data-ng-disabled="checked_list.length == 0"
+        ng-click="ctrl.remove_from_blackboard(checked_list)">
+    <span class="glyphicon glyphicon-minus-sign">
+    </span>&nbsp;Remove
+    <span class="glyphicon glyphicon-blackboard" ></span>
+</button>

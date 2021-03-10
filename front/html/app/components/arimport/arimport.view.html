@@ -1,0 +1,197 @@
+<div data-ng-app="ARImportModule" ng-controller="ARImportCtrl as arimport_ctrl">
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form name="arimportForm" class="form">
+            <div class="col-sm-12 controls">
+                <div class="input-inline col-sm-4">
+                    <select data-nq-select="" data-ng-required="true" name="sample_type"
+                            data-qo-placeholder="Sample Type.."
+                            data-ng-model="arimport_params.selectedSampleType"
+                            ng-options="s.title for s in sample_types|filter:{title:'!SAMPLE'}" required>
+                    </select>
+                </div>
+                <div class="input-inline col-sm-4">
+                            <input type="text" data-qo-display-type="input" name="container_type"
+                                   ng-model="arimport_params.selectedContainerType" class="form-control"
+                                   placeholder="Container Type..."  ng-readonly="1">
+                        </div>
+                <div class="input-inline col-sm-4">
+                            <input type="text" ng-model="arimport_params.selectedSamplingDate" class="form-control"
+                                   data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                                   placeholder="datepicker" data-ng-required="true" name="sampling_date" required>
+                </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;"
+                  ng-if="arimport_params.selectedSampleType.title==='FLOWCELL'
+                    || arimport_params.selectedSampleType.title==='POOL'
+                    || arimport_params.selectedSampleType.title==='MISEQ'">
+                <div class="input-inline col-sm-2">
+                    <file-field class="btn"
+                                ng-class="{'btn-success': (arimport_params.attachment_content !== null) }"
+                                ng-model="arimport_params.attachment" data-ng-required="False">
+                        <span>Upload SampleSheet</span>
+
+                    </file-field>
+                </div>
+                <div class="input-inline col-sm-10">
+                <input type="text" class="form-control"  ng-model="arimport_params.attachment.name"
+                       placeholder="{{placedolder[arimport_params.selectedSampleType.title]}}" value="{{arimport_params.attachment.name}}">
+                    </div>
+            </div>
+            <div class="col-sm-12 controls" style="margin-top:10px;" data-ng-if="arimport_params.selectedSampleType.title==='RNA' || arimport_params.selectedSampleType.title==='DNA'">
+                <div class="input-inline col-sm-2" >
+                    <file-field class="btn"
+                                ng-class="{'btn-success': (arimport_params.client_samples.length >0) }"
+                                ng-model="arimport_params.uploadFile" data-ng-required="True"><span class="input-inline col-sm-4">Upload Request</span></file-field>
+                </div>
+                <div class="input-inline col-sm-10">
+                    <input type="text" class="form-control"  ng-model="arimport_params.uploadFile.name"
+                       placeholder="CSV Client Request File..." value="{{arimport_params.uploadFile.name}}">
+                </div>
+            </div>
+
+            <div class="col-sm-12" style="margin-top:10px;" ng-if="arimport_params.client_samples.length >0">
+                        <div class="input-inline col-sm-4">
+                            <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                                    data-qo-placeholder="Client.." name="client"
+                                    data-ng-model="arimport_params.selectedClient"
+                                    data-ng-options="c.title for c in clients">
+                            </select>
+                        </div>
+                        <div class="input-inline col-sm-4">
+                            <select data-nq-select="" data-ng-required="true"  data-min-required="1"
+                                    name="contact"
+                                    data-qo-placeholder="Contact.."
+                                    data-ng-model="arimport_params.selectedContact"
+                                    data-ng-options="c.title for c in contacts">
+                            </select>
+                        </div>
+                        <div class="input-inline col-sm-4">
+                            <select data-nq-select="" name="cccontacts"
+
+                                    data-qo-multiple="true"
+                                    data-qo-placeholder="CC Contacts.."
+                                    data-ng-model="arimport_params.selectedCCContacts"
+                                    data-ng-options="c.title for c in cc_contacts">
+                            </select>
+                        </div>
+
+            </div>
+             <div class="col-sm-12" style="margin-top:10px;" ng-if="arimport_params.client_samples.length >0 && arimport_params.selectedClient.title.length>0">
+                        <div class="input-inline col-sm-4">
+                            <input type="text" data-ng-required="true"
+                                   title="batch"
+                                   class="form-control"
+                                   ng-model="arimport_params.selectedBatch"
+                                   ng-model-options="{ updateOn: 'blur' }"
+                                   placeholder="Batch..."/>
+                        </div>
+                        <div class="input-inline col-sm-8">
+                            <input type="text" class="form-control" data-ng-required="true"
+                                   ng-model="arimport_params.textDescription" data-name="description"
+                                   ng-model-options="{ updateOn: 'blur' }"
+                                   placeholder="Description...">
+                        </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;" ng-if="arimport_params.client_samples.length >0 && arimport_params.selectedBatch.length > 0">
+                <div class="input-inline col-sm-6">
+                            <select data-nq-select=""
+                                    data-qo-max-length="0" data-name="services"
+                                    data-qo-multiple="true"
+                                    data-qo-display-type="input"
+                                    data-qo-placeholder="Extraction..."
+                                    data-ng-model="arimport_params.selectedAnalysisServices.extraction"
+                                    data-ng-options="as.title for as in analysis_services.extraction" >
+                            </select>
+                        </div>
+                <div class="input-inline col-sm-6">
+                            <select data-nq-select=""
+                                    data-qo-max-length="0" data-name="services"
+                                    data-qo-multiple="true"
+                                    data-qo-display-type="input"
+                                    data-qo-placeholder="NGS Library..."
+                                    data-ng-model="arimport_params.selectedAnalysisServices.library_prep"
+                                    data-ng-options="as.title for as in analysis_services.library_prep" >
+                            </select>
+                        </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;" ng-if="arimport_params.client_samples.length >0 && arimport_params.selectedBatch.length > 0">
+                <div class="input-inline col-sm-6">
+                            <select data-nq-select=""
+                                    data-qo-max-length="0" data-name="services"
+                                    data-qo-multiple="true"
+                                    data-qo-display-type="input"
+                                    data-qo-placeholder="NGS Illumina..."
+                                    data-ng-model="arimport_params.selectedAnalysisServices.illumina"
+                                    data-ng-options="as.title for as in analysis_services.illumina" >
+                            </select>
+                        </div>
+                <div class="input-inline col-sm-6">
+                            <select data-nq-select=""
+                                    data-qo-max-length="0" data-name="services"
+                                    data-qo-multiple="true"
+                                    data-qo-display-type="input"
+                                    data-qo-placeholder="Bioinformatics Dept..."
+                                    data-ng-model="arimport_params.selectedAnalysisServices.bioinfo"
+                                    data-ng-options="as.title for as in analysis_services.bioinfo" >
+                            </select>
+                        </div>
+            </div>
+            <div class="col-sm-12 controls" style="margin-top:10px;" >
+                        <div class="input-inline col-sm-2" ng-if="arimport_params.client_samples.length >0
+                            && (arimport_params.selectedAnalysisServices.bioinfo.length > 0 || arimport_params.selectedAnalysisServices.illumina.length > 0
+                            || arimport_params.selectedAnalysisServices.libray_prep.length > 0 || arimport_params.selectedAnalysisServices.extraction.length > 0)">
+                            <select data-nq-select="" data-ng-required="true" name="export_mode"
+                                    data-ng-init="arimport_params.selectedExportMode=export_mode[0]"
+                                    data-qo-placeholder="Delivery Mode.."
+                                    data-qo-display-type="input"
+                                    data-ng-model="arimport_params.selectedExportMode"
+                                    data-ng-options="e.label for e in export_mode" required>
+                            </select>
+                        </div>
+                         <div class="input-inline col-sm-4" ng-if="arimport_params.client_samples.length >0
+                            && (arimport_params.selectedAnalysisServices.bioinfo.length > 0 || arimport_params.selectedAnalysisServices.illumina.length > 0
+                            || arimport_params.selectedAnalysisServices.libray_prep.length > 0 || arimport_params.selectedAnalysisServices.extraction.length > 0)">
+                            <select data-nq-select="" data-ng-required="true" name="export_mode"
+                                    data-qo-placeholder="Cost Center.."
+                                    data-ng-model="arimport_params.selectedCostCenter"
+                                    data-ng-options="c.description for c in cost_centers" required>
+                            </select>
+                        </div>
+                        <div class="input-inline col-sm-4" ng-if="arimport_params.client_samples.length >0
+                            && (arimport_params.selectedAnalysisServices.bioinfo.length > 0 || arimport_params.selectedAnalysisServices.illumina.length > 0
+                            || arimport_params.selectedAnalysisServices.libray_prep.length > 0 || arimport_params.selectedAnalysisServices.extraction.length > 0)">
+                            <input type="checkbox" ng-model="arimport_params.createWorksheets" data-nq-switch-button=""
+                                   data-theme="success,stripped,rounded"
+                                   data-label-text="Worksheets" data-true-label="CREATE"
+                                   data-false-label="NONE">
+                        </div>
+                        <div class="input-inline col-sm-2 pull-right">
+                            <button type="button" class="btn btn-success pull-right"
+                                    data-ng-click="submit(arimport_params)"
+                                    data-ng-disabled="!(arimport_params.client_samples.length >0
+                            && (arimport_params.selectedAnalysisServices.bioinfo.length > 0 || arimport_params.selectedAnalysisServices.illumina.length > 0
+                            || arimport_params.selectedAnalysisServices.libray_prep.length > 0 || arimport_params.selectedAnalysisServices.extraction.length > 0))">
+                                <span class="glyphicon glyphicon-import"></span>&nbsp;Import
+                            </button>
+                        </div>
+                    </div>
+
+        </form>
+    </div>
+</div>
+<div class="panel panel-primary" style="margin-top:10px;" ng-if="arimport_params.client_samples.length >0">
+            <div class="panel-heading">
+			<!--<div class="panel-title">{{arimport_params.uploadFile.name}}&nbsp;::&nbsp;{{arimport_params.client_samples.length}} samples</div>-->
+			<div class="panel-title">{{arimport_params.client_samples.length}} sample<span data-ng-if="arimport_params.client_samples.length > 1">s</span>
+            </div>
+
+		</div>
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <ng-include src="'app/components/arimport/samples_table.view.html'"></ng-include>
+
+                </div>
+            </div>
+</div>
+</div>

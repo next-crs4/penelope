@@ -1,0 +1,88 @@
+<div class="panel panel-primary">
+  <div class="panel-body">
+      <div class="col-sm-12 controls" >
+            <div class="col-sm-4 controls" >
+                <table class="table table-striped">
+                    <tr>
+                        <td>Purchase Order:</td>
+                        <td>{{purchase_order.title}}</td>
+                    </tr>
+                    <tr>
+                        <td>Order Number:</td>
+                        <td>{{purchase_order.order_number}}</td>
+                    </tr>
+                    <tr>
+                        <td>CIG:</td>
+                        <td>{{purchase_order.rights}}</td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td>{{purchase_order.description}}</td>
+                    </tr>
+                    <tr data-ng-if="purchase_order!=null">
+                        <td>Target:</td>
+                        <td>{{ctrl.get_target(purchase_order.client_id)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Order Date:</td>
+                        <td>{{ctrl.format_date(purchase_order.order_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Closing Date:</td>
+                        <td>{{ctrl.format_date(purchase_order.expiration_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>State:</td>
+                        <td>{{ctrl.format_review_state(purchase_order.review_state)}}</td>
+                    </tr>
+                </table>
+            </div>
+
+             <div class="col-sm-8 controls" >
+                <table class="table table-striped">
+                     <tr>
+                         <td data-ng-if="purchase_order!=null">Supplier:</td>
+                         <td>{{ctrl.get_supplier(purchase_order.location)}}</td>
+                         <td>&nbsp;</td>
+                         <td>&nbsp;</td>
+                         <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>Amount:</td>
+                        <td>{{purchase_order.contributors}}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr data-ng-if="purchase_order!=null">
+                        <td colspan="5">
+                            Reagents:
+                        </td>
+                    </tr>
+                    <tr data-ng-if="purchase_order!=null">
+                        <td colspan="5">
+                             <table class="table table-striped table-hover table-bordered table-responsive" >
+                                    <tr ng-repeat="lane in ctrl.get_lab_products(purchase_order.remarks)">
+                                        <th class="alert alert-warning">{{lane.title}} </th>
+                                        <td>{{ lane.quantity }}</td>
+                                    </tr>
+                             </table>
+                        </td>
+
+                    </tr>
+                </table>
+             </div>
+        </div>
+  </div>
+</div>
+<div class="panel panel-success" data-ng-if="purchase_order!=null && purchase_order.review_state !== 'completed'">
+    <div class="panel-body">
+        <ng-include ng-if="purchase_order.review_state === 'draft'" src="'app/components/admin/purchase_orders/purchase_order.issues.view.html'"></ng-include>
+        <ng-include ng-if="purchase_order.review_state === 'issued'" src="'app/components/admin/purchase_orders/purchase_order.complete.view.html'"></ng-include>
+    </div>
+</div>
+<div class="panel panel-primary" data-ng-if="purchase_order!=null && reagents.length > 0">
+    <div class="panel-body">
+        <ng-include src="'app/components/admin/purchase_orders/purchase_order.lab_products.view.html'"></ng-include>
+    </div>
+</div>

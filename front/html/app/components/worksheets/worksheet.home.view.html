@@ -1,0 +1,13 @@
+<div style="padding-top:10px;" data-ng-app="WorksheetsModule" data-ng-controller="WorksheetDetailsCtrl as ctrl">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="demoTabset">
+            <div data-nq-tab="" data-heading="{{state.worksheet_id}}">
+                <ng-include src="'app/components/worksheets/worksheet.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

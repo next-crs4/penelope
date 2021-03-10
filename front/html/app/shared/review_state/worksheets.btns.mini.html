@@ -1,0 +1,32 @@
+<button type="button" class="btn btn-default btn-xs" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('open', row.review_state)">
+    <span class="glyphicon glyphicon-folder-close"
+          data-qo-theme="info" data-qo-placement="right"
+          data-nq-tooltip="" data-qs-title="Close"
+          data-ng-click="ctrl.change_review_state('close', row.id)">
+    </span>
+</button>
+<button type="button" class="btn btn-default btn-xs" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('closed', row.review_state)">
+    <span class="glyphicon glyphicon-folder-open"
+          data-qo-theme="info" data-qo-placement="right"
+          data-nq-tooltip="" data-qs-title="Open"
+          data-ng-click="ctrl.change_review_state('open', row.id)">
+    </span>
+</button>
+<button type="button" class="btn btn-warning btn-xs" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('cancelled', row.review_state)">
+    <span class="glyphicon glyphicon-retweet"
+          data-qo-theme="info" data-qo-placement="right"
+          data-nq-tooltip="" data-qs-title="Reinstate"
+          data-ng-click="ctrl.change_review_state('reinstate', row.id)">
+    </span>
+</button>
+<button type="button" class="btn btn-danger btn-xs" aria-hidden="true"
+        ng-if="ctrl.check_transitions('open', row.review_state) || ctrl.check_transitions('closed', row.review_state)">
+    <span class="glyphicon glyphicon-trash"
+          data-qo-theme="info" data-qo-placement="right"
+          data-nq-tooltip="" data-qs-title="Cancel"
+          data-ng-click="ctrl.change_review_state('cancel', row.id)">
+    </span>
+</button>

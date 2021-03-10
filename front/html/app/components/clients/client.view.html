@@ -1,0 +1,83 @@
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div class="col-sm-12 controls">
+            <div class="col-sm-4 controls">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Client:</td>
+                        <td>{{client.client_id}}</td>
+                    </tr>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{client.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Creation Date:</td>
+                        <td>{{ctrl.format_date(client.creation_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>State:</td>
+                        <td>{{ctrl.format_review_state(client.review_state)}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-4 controls">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Email:</td>
+                        <td>{{client.email_address}}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone:</td>
+                        <td>{{client.phone}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Address:</td>
+                    </tr>
+                    <tr data-ng-show="client.physical_address.address.length > 0">
+                        <td colspan="2"><span class="pull-right">{{client.physical_address.address}}</span></td>
+                    </tr>
+                    <tr data-ng-show="client.physical_address.zip.length > 0 || client.physical_address.city.length > 0">
+                        <td><span class="pull-right">{{client.physical_address.zip}}</span></td>
+                        <td><span class="pull-right">{{client.physical_address.city}}</span></td>
+                    </tr>
+                    <tr data-ng-show="client.physical_address.country.length > 0 && client.physical_address.country != 'Afghanistan'">
+                        <td colspan="2"><span class="pull-right">{{client.physical_address.country}}</span></td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="col-sm-4 controls">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Contacts:</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr data-ng-repeat="c in client.contacts">
+                        <td><a href="mailto:{{c.email_address}}">{{c.email_address}}</a></td>
+                        <td>{{c.title}}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div data-nq-tabset="" data-tabset-model="batchTabset">
+            <div data-nq-tab="" data-heading="batches">
+                <ng-include src="'app/components/clients/batches.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+
+            </div>
+            <div data-nq-tab="" data-heading="Cost Centers">
+                <ng-include src="'app/components/clients/cost_centers.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div style="padding-top:10px;" data-ng-app="AnalysisRequestsModule" data-ng-controller="AnalysisRequestDetailsCtrl as ctrl">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="demoTabset">
+            <div data-nq-tab="" data-heading="{{state.analysis_request_id}}">
+                <ng-include src="'app/components/analysis_requests/analysis_request.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

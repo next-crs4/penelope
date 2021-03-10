@@ -1,0 +1,150 @@
+<form name="loadingLabProductForm" class="form">
+<div class="panel panel-primary">
+    <div class="panel-body">
+
+            <div class="col-sm-12" style="margin-top:10px;">
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-barcode"></i>
+                        </div>
+                        <input type="text" ng-model="_loading_params.barcode" class="form-control"
+                               placeholder="Catalog ID..."
+                               ng-readonly="1"
+                               data-ng-required="true" required>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                    <div class="input-group" >
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" ng-model="_loading_params.title" class="form-control"
+                               placeholder="Title..." data-ng-required="true" ng-readonly="1" required>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" ng-model="_loading_params.description" class="form-control"
+                               placeholder="Description..." ng-readonly="1">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;">
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" data-ng-model="_loading_params.order_number" class="form-control"
+                               placeholder="Order Number...">
+                        <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                            data-qo-placeholder="Order Number..."
+                            data-ng-model="_loading_params.order_number"
+                            data-ng-options="s.title for s in storage_locations">
+                    </select>
+                    </div>
+                </div>
+                 <div class="input-inline col-sm-4">
+                    <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                            data-qo-placeholder="Storage Locations.."
+                            data-ng-model="_loading_params.storage_locations"
+                            data-ng-options="s.title for s in storage_locations">
+                    </select>
+
+                </div>
+                <div class="input-inline col-sm-4">
+                     <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </div>
+                        <input type="text" data-ng-model="_loading_params.expiration_date" class="form-control"
+                               data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                               placeholder="Expiration Date..." data-ng-required="true" name="expiration_date">
+                     </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 controls" style="margin-top:10px;" >
+                <div class="col-sm-12 input-inline pull-right">
+                    <button type="button" class="btn btn-primary pull-right"
+                            data-ng-click="ctrl._confirm(_loading_params)"
+                            data-ng-disabled="_loading_params.barcode.length==0 || _loading_params.barcode == null">
+                        <span class="glyphicon glyphicon-check"></span>&nbsp;Confirm
+                    </button>
+                </div>
+            </div>
+
+    </div>
+</div>
+    <div class="panel panel-primary" data-ng-if="_lab_products_toload.length > 0">
+        <div class="panel-body">
+              <div class="col-sm-12 controls" style="margin-top:10px;">
+                   <table class="table table-striped table-hover table-bordered table-responsive" >
+                       <thead>
+                            <tr class="alert alert-success">
+                                <th>
+                                    <div style="padding-left:10px;">
+                                        <input type="checkbox"  value=""
+                                               data-ng-checked="_checked_list.length == _lab_products_toload.length  && _checked_list.length > 0"
+                                               data-ng-click="ctrl._toggle_all()">
+                                </div>
+                                </th>
+                                <th ng-click="sort('title')">Title
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th ng-click="sort('description')">Description
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th ng-click="sort('storage_locations.title')">Location
+                                     <span class="glyphicon sort-icon" ng-show="sortKey=='storage_locations.title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th ng-click="sort('volume')">Volume
+                                     <span class="glyphicon sort-icon" ng-show="sortKey=='volume'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th ng-click="sort('price')">Price
+                                     <span class="glyphicon sort-icon" ng-show="sortKey=='price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th ng-click="sort('order_number')">Order Number
+                                     <span class="glyphicon sort-icon" ng-show="sortKey=='order_number'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th ng-click="sort('expiration_date')">Expiration
+                                     <span class="glyphicon sort-icon" ng-show="sortKey=='order_number'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                            </tr>
+                       </thead>
+                       <tbody ng-if="_lab_products_toload.length > 0">
+                            <tr dir-paginate="line in _lab_products_toload | orderBy:sortKey:reverse|filter:search|itemsPerPage:pagination.page_size"
+                                total-items="pagination.total" current-page="pagination.current">
+                                <td>
+                                    <div style="padding-left:10px;">
+                                        <input type="checkbox"  value="{{line}}"
+                                               data-ng-checked="_checked_list.indexOf(line) > -1"
+                                               data-ng-click="ctrl._toggle(line)">
+                                    </div>
+                                </td>
+                                <td>{{line.title}}</td>
+                                <td class="small">{{line.description}}</td>
+                                <td>{{line.storage_locations.title}}</td>
+                                <td>{{line.volume}}</td>
+                                <td>{{line.price}}</td>
+                                <td>{{line.order_number}}</td>
+                                <td>{{ctrl.format_date(line.expiration_date)}}</td>
+                            </tr>
+                       </tbody>
+                </table>
+              </div>
+            <div class="col-sm-12 controls" style="margin-top:10px;" >
+                <div class="col-sm-12 input-inline pull-right">
+                    <button type="button" class="btn btn-success pull-right"
+                            data-ng-click="ctrl._load_products()">
+                        <span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Load
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

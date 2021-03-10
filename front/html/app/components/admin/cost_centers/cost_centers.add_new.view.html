@@ -1,0 +1,192 @@
+<div data-ng-app="CostCentersModule" ng-controller="AddCostCenterCtrl as ctrl">
+    <form name="addCostCenterForm" class="form">
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div class="col-sm-12" style="margin-top:10px;">
+                    <div class="input-inline col-sm-3">
+                        <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                                data-qo-placeholder="Client.." name="client"
+                                data-ng-model="costcenter_params.selectedClient"
+                                data-ng-options="c.title for c in clients">
+                        </select>
+                    </div>
+                    <div class="input-inline col-sm-3">
+                        <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                                name="contact"
+                                data-qo-placeholder="Contact.."
+                                data-ng-model="costcenter_params.selectedContact"
+                                data-ng-options="c.title for c in contacts">
+                        </select>
+                    </div>
+                    <div class="input-inline col-sm-3">
+                        <input type="text" ng-model="costcenter_params.selectedOrderDate" class="form-control"
+                               data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                               placeholder="datepicker" data-ng-required="true" name="order_date" required>
+                    </div>
+                    <div class="input-inline col-sm-3">
+                        <input type="text" ng-model="costcenter_params.selectedExpirationDate" class="form-control"
+                               data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                               placeholder="datepicker" data-ng-required="true" name="expiration_date" required>
+                    </div>
+                </div>
+                <div class="col-sm-12" style="margin-top:10px;"
+                     ng-if="costcenter_params.selectedClient.title.length>0 && costcenter_params.selectedContact.title.length>0 && costcenter_params.selectedOrderDate < costcenter_params.selectedExpirationDate">
+                    <div class="input-inline col-sm-3">
+                        <input type="text" data-ng-required="true"
+                               title="order_number"
+                               class="form-control"
+                               ng-model="costcenter_params.selectedOrderNumber"
+
+                               placeholder="CostCenterID..."/>
+                    </div>
+                    <div class="input-inline col-sm-3">
+                        <input type="text" data-ng-required="true"
+                               title="title"
+                               class="form-control"
+                               ng-model="costcenter_params.selectedTitle"
+
+                               placeholder="Acronym..."/>
+                    </div>
+                    <div class="input-inline col-sm-6">
+                        <input type="text" class="form-control" data-ng-required="true"
+                               ng-model="costcenter_params.selectedDescription" data-name="description"
+
+                               placeholder="Description...">
+                    </div>
+                </div>
+                <div class="col-sm-12" style="margin-top:10px;" ng-if="costcenter_params.selectedDescription!=null">
+                    <div class="input-inline col-sm-4">
+                        <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                                data-qo-placeholder="Batches.." name="batches"
+                                data-qo-max-length="0" data-name="services"
+                                data-qo-multiple="true"
+                                data-qo-display-type="input"
+                                data-ng-model="costcenter_params.selectedBatches"
+                                data-ng-options="b.title for b in batches">
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-euro"></i>
+                            </div>
+                            <input type="text"
+                                   class="form-control"
+                                   data-name="amount"
+                                   data-ng-model="costcenter_params.selectedAmount"
+
+                                   placeholder="Amount..."/>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-euro"></i>
+                            </div>
+                            <input type="text"
+                                   class="form-control"
+                                   data-name="estimed"
+                                   data-ng-model="costcenter_params.selectedEstimatedCost"
+
+                                   placeholder="Reagents's estimated cost..."/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 controls" style="margin-top:10px;">
+                    <div class="col-sm-12 input-inline pull-right">
+                        <button type="button" class="btn btn-success pull-right"
+                                data-ng-click="ctrl.submit(costcenter_params)"
+                                data-ng-disabled="costcenter_params.selectedClient.title.length==0 || costcenter_params.selectedDescription==null || costcenter_params.selectedAmount == null">
+                            <span class="glyphicon glyphicon-copy"></span>&nbsp;Create
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div class="col-sm-12 controls">
+                    <label title="published" class="btn btn-success  pull-right" style="margin-left:10px;">{{reagents.length}}</label>
+                </div>
+                <div class="col-sm-12" style="margin-top:10px;">
+                    <table class="table table-striped table-hover table-bordered table-responsive">
+                        <thead>
+                        <tr class="alert alert-success">
+                            <th>
+                                <div style="padding-left:10px;">
+                                    <input type="checkbox" value=""
+                                           data-ng-checked="checked_list.length == reagents.length  && checked_list.length > 0"
+                                           data-ng-click="ctrl.toggle_all()">
+                                </div>
+                            </th>
+                            <th ng-click="sort('title')">Name
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='title'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('rights')">Order Number
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='description'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('location')">Storage Location
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='description'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('expiration_date')">Expiration
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='date'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('effective_date')">Received date
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='date'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('review_state')">State
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='review_state'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('price')">Price
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='price'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                             <th>Used</th>
+                            <th>To use</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-if="reagents.length > 0">
+                        <tr data-ng-repeat="row in reagents | orderBy:sortKey:reverse|filter:search"
+                            ng-class="{'alert alert-danger': ctrl.check_expiration(row.expiration_date)<=0, 'alert alert-warning': ctrl.check_expiration(row.expiration_date)<=30}">
+                            <td>
+                                <div style="padding-left:10px;">
+                                    <input type="checkbox" value="{{row.id}}"
+                                           data-ng-checked="checked_list.indexOf(row.id) > -1"
+                                           data-ng-click="ctrl.toggle(row.id)">
+                                </div>
+                            </td>
+                            <td>{{ctrl.get_labproduct_title(row.title)}}</td>
+                            <td>{{ctrl.get_order_number(row.rights)}}</td>
+                            <td>{{ctrl.get_storage_location(row.location)}}</td>
+                            <td>{{ctrl.format_date(row.expiration_date)}}</td>
+                            <td>{{ctrl.format_date(row.effective_date)}}</td>
+                            <td>{{ctrl.format_review_state(row.review_state)}}</td>
+                            <td>{{row.price}}</td>
+                            <td>{{ctrl.get_consumption(row.id)}}</td>
+                            <td>
+                                <div class="input-inline col-sm-12">
+                                    <input type="text" data-ng-required="true"
+                                           title="title" class="form-control"
+                                           ng-model="costcenter_params.selectedReagents[row.id]"
+                                           data-ng-disabled="checked_list.indexOf(row.id) == -1"
+                                           placeholder="Use... [0..1]"/>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

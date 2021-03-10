@@ -1,0 +1,157 @@
+<form class="form-inline">
+            <div class="col-sm-12 controls" >
+                <input type="text" ng-model="search" class="form-control pull-right" ng-show="ngCart.getTotalItems() > 0" placeholder="Search...">
+            </div>
+</form>
+<div class="col-sm-12 controls" >
+<div class="alert alert-danger" role="alert" ng-show="ngCart.getTotalItems() === 0">
+    Your blackboard is empty
+</div>
+</div>
+<div class="col-sm-12 controls" data-ng-app="BlackBoardModule" data-ng-controller="BlackBoardCtrl as ctrl" style="margin-top:10px;">
+    <table class="table table-striped table-bordered ngCart cart"  ng-show="ngCart.getTotalItems() > 0">
+
+        <thead>
+                <tr class="alert alert-success">
+                    <th>
+                        <div style="padding-left:10px;">
+                                <input type="checkbox"  value=""
+                                       data-ng-checked="checked_list.length == ngCart.getCart().items.length  && checked_list.length > 0"
+                                       data-ng-click="ctrl.toggle_all()">
+                        </div>
+                    </th>
+                    <th ng-click="sort('getData().rights')">#ID
+                         <span class="glyphicon sort-icon" ng-show="sortKey=='getData().rights'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('getData().id')">RequestID
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('getData().sample_id')">SampleID
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().sample_id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('getData().client_sample_id')">ClientSID
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().client_sample_id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('getData().client')">Client
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().client'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('getData().batch')">Batch
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().batch'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('getData().sample_type')">Type
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().sample_type'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <!--<th>Analyses
+                    </th>-->
+                    <th ng-click="sort('getData().date')">Date
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('getData().review_state')">State
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='getData().review_state'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th><span class="fic glyphicon glyphicon-wrench" ></span></th>
+                    <th><span class="fic glyphicon glyphicon-blackboard" ></span></th>
+
+                </tr>
+        </thead>
+        <tbody>
+            <tr dir-paginate="item in ngCart.getCart().items | orderBy:sortKey:reverse|filter:search|itemsPerPage:150" ng-init="row=item.getData()">
+                    <td>
+                         <div style="padding-left:10px;">
+                                <input type="checkbox"  value="{{row.id}}"
+                                       data-ng-checked="checked_list.indexOf(row.id) > -1"
+                                       data-ng-click="ctrl.toggle(row.id)">
+                        </div>
+                    </td>
+                    <td>{{row.rights}}</td>
+
+                    <td><span ng-if="currentUser.role=='Analyst'">{{row.id}}</span>
+                        <a ng-if="currentUser.role=='Site Administrator' || currentUser.role=='LabManager'" class="pull-left" ui-sref="analysis_request({analysis_request_id: row.id})" style="text-decoration: none;">
+                            <span>{{row.id}}</span>
+                        </a>
+
+                    </td>
+                    <td>{{row.sample_id}}</td>
+                    <td>{{row.client_sample_id}}</td>
+                    <td>{{row.client}}</td>
+                    <td><span data-ng-if="currentUser.role=='Analyst'">{{row.batch_title}}</span>
+                        <a data-ng-if="currentUser.role=='Site Administrator' || currentUser.role=='LabManager'" class="pull-left" ui-sref="batch({batch_id: row.batch_id})" style="text-decoration: none;">
+                            <span>{{row.batch_title}}</span>
+                        </a>
+
+                    </td>
+                    <td>{{row.sample_type}}</td>
+                    <td>
+                        {{ctrl.format_date(row.date)}}
+                        <span class="pull-right">
+                            <button type="button" data-nq-popover="" class="btn btn-primary btn-xs">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <div class="popover col-sm-6 controls">
+                                <h3 class="popover-title">Logbook: {{row.id}}</h3>
+                                <div class="popover-content">
+                                    <table class="table table-striped">
+                                        <tr class="alert alert-info">
+                                            <td>Creation Date</td>
+                                            <td ng-if="row.date_created!=='None'">{{ctrl.format_date(row.date_created)}}</td>
+                                            <td ng-if="row.date_created==='None'"><span class="glyphicon glyphicon-remove"></span></td>
+                                        </tr>
+                                        <tr class="alert alert-warning">
+                                            <td>Date Received</td>
+                                            <td ng-if="row.date_received!=='None'">{{ctrl.format_date(row.date_received)}}</td>
+                                            <td ng-if="row.date_received==='None'"><span class="glyphicon glyphicon-remove"></span></td>
+                                        </tr>
+                                        <tr class="alert alert-info">
+                                            <td>Date Published</td>
+                                            <td ng-if="row.date_published!=='None'">{{ctrl.format_date(row.date_published)}}</td>
+                                            <td ng-if="row.date_published==='None'"><span class="glyphicon glyphicon-remove"></span></td>
+                                        </tr>
+                                        <tr class="alert alert-warning">
+                                            <td>Last Update</td>
+                                            <td ng-if="row.date!=='None'">{{ctrl.format_date(row.date)}}</td>
+                                            <td ng-if="row.date==='None'"><span class="glyphicon glyphicon-remove"></span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </span>
+                    </td>
+
+                    <td>{{ctrl.format_review_state(row.review_state)}}</td>
+                    <td><ng-include src="'app/shared/review_state/review_state.btns.mini.html'"></ng-include></td>
+                    <td>
+                        <button class="btn btn-danger btn-xs" ng-click="ctrl.remove_from_blackboard(row.id)">
+                            <span class="glyphicon glyphicon-minus-sign"></span>
+                        </button>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+
+            <dir-pagination-controls
+                    max-size="10"
+                    direction-links="true"
+                    boundary-links="true"
+                    class="pull-right"
+                    style="margin-top: -25px">
+            </dir-pagination-controls>
+            <div class="col-sm-12 controls" style="margin-top:10px;" ng-if="ngCart.getTotalItems() > 0">
+                <!--<ng-include src="'app/shared/review_state/review_state.btns.html'"></ng-include>-->
+                <!--<ng-include src="'app/shared/review_state/workflow_transitions.btns.html'"></ng-include>-->
+                <ng-include src="'app/shared/blackboard/toggle.btns.html'" class="pull-right"></ng-include>
+                <button type="button" class="btn btn-primary" aria-hidden="true"
+                        ng-csv="csv.sample_list" lazy-load="true" csv-header="ctrl.getHeader()"
+                        filename="{{ctrl.get_filename()}}" field-separator=",">
+                    <span class="glyphicon glyphicon-export"></span>&nbsp;Export&nbsp;SampleList
+                </button>
+            </div>
+</div>
+<style>
+    .ngCart.cart span[ng-click] {
+        cursor: pointer;
+    }
+    .ngCart.cart .glyphicon.disabled {
+        color:#aaa;
+    }
+</style>

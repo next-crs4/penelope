@@ -1,0 +1,35 @@
+angular
+    .module('InitModule', [])
+    .constant('init', {
+        apiRest: {
+        	read: {
+        		url: 'DUMMY_READ_REST_URL',
+        	},
+        	write: {
+        		url: 'DUMMY_WRITE_REST_URL',
+        	},
+        },
+        bikaApiRest: {
+        	host: 'DUMMY_BIKA_HOST',
+        },
+        irodsApiRest: {
+        	samplesheet_collection: 'DUMMY_IRODS_SAMPLESHEET_COLLECTION',
+        	irods_host: 'DUMMY_IRODS_HOST',
+            irods_port: 'DUMMY_IRODS_PORT',
+            irods_user: 'DUMMY_IRODS_USER',
+            irods_password: 'DUMMY_IRODS_PASSWORD',
+            irods_zone: 'DUMMY_IRODS_ZONE',
+        	irods_resource: 'DUMMY_IRODS_RESOURCE',
+
+        },
+        sshApiRest: {
+        	host: 'DUMMY_SSH_HOST',
+        	user: 'DUMMY_SSH_USER',
+        	tmp_folder: 'DUMMY_TMP_FOLDER',
+        	run_folders: DUMMY_RUN_FOLDERS,
+        	run_info_file: 'DUMMY_RUN_INFO_FILE',
+        	run_parameters_file:  'DUMMY_RUN_PARAMETERS_FILE',
+        	report_folder: 'DUMMY_REPORT_FOLDER',
+        	report_host: 'DUMMY_REPORT_HOST',
+        }
+	});

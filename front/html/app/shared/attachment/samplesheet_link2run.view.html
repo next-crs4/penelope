@@ -1,0 +1,208 @@
+<div data-ng-app="SamplesheetModule" ng-controller="Link2RunCtrl as ctrl">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div name="link2RunForm" class="form">
+                <div class="col-sm-12" style="margin-top:10px;"
+                  ng-if="state.content===undefined">
+                    <div class="input-inline col-sm-2">
+                        <file-field class="btn"
+                                    ng-class="{'btn-success': (samplesheet_params.samplesheet.length > 0) }"
+                                    ng-model="samplesheet_params.attachment" data-ng-required="False">
+                            <span>Upload SampleSheet</span>
+
+                        </file-field>
+                    </div>
+                    <div class="input-inline col-sm-10">
+                        <input type="text" class="form-control"  ng-model="samplesheet_params.attachment.name"
+                           placeholder="IEM Samplesheet..." value="{samplesheet_params.attachment.name}}">
+                    </div>
+                </div>
+                <div class="col-sm-12" style="margin-top:10px;" data-ng-if="attachment.samplesheet.length > 0">
+                    <div class="input-inline col-sm-4">
+                        <select data-nq-select=""
+                                data-min-required="1"
+                                data-qo-placeholder="Runs.."
+                                data-ng-model="samplesheet_params.run_folder"
+                                ng-options="r.running_folder for r in run_folders">
+                        </select>
+                        <div class="col-sm-10" ng-if="samplesheet_params.switchRun" style="margin-top:10px;">
+                            <input type="text" class="form-control"
+                                   ng-model="samplesheet_params.custom_run_folder"
+                                   placeholder="Add Run Folder..." >
+                        </div>
+                        <div class="col-sm-2" ng-if="samplesheet_params.switchRun" style="margin-top:10px;">
+                            <button type="button" class="btn btn-success"
+                                    data-ng-click="ctrl.add_run_folder(samplesheet_params.custom_run_folder)">
+                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                FCID
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.fcid" class="form-control"
+                                   placeholder="Flowcell ID..."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                 <i class="glyphicon glyphicon-inbox"></i>
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.instrument" class="form-control"
+                                   placeholder="Instrument..."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                 <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.date" class="form-control"
+                                   placeholder="Date..."  ng-readonly="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 controls" style="margin-top:20px;"
+                     data-ng-if="samplesheet_params.run_folder != null && !samplesheet_params.switchRun">
+                    <div class="col-sm-4">
+                        <input type="checkbox" ng-model="samplesheet_params.switchReads" data-nq-switch-button="" class="col-sm-3"
+                               data-theme="primary,stripped,rounded" ng-readonly="1" data-ng-disabled="1"
+                               data-label-text="Reads" data-false-label="Single End"  data-true-label="Paired End">
+
+                        <div style="margin-top:10px;">
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.r1" class="form-control"
+                                   placeholder="Read 1 Cycles.."  ng-readonly="1">
+                        </div>
+                        <div  style="margin-top:10px;"
+                              data-ng-if="samplesheet_params.switchReads" data-ng-hide="!samplesheet_params.switchReads">
+                             <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.r2" class="form-control"
+                                   placeholder="Read 2 Cycles.."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="checkbox" ng-model="samplesheet_params.switchIndexes" data-nq-switch-button="" class="col-sm-3"
+                               data-theme="primary,stripped,rounded" data-ng-disabled="1"
+                               data-label-text="Indexes" data-false-label="Single Index" data-true-label="Dual Index">
+                        <div style="margin-top:10px;">
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.i1" class="form-control"
+                                   placeholder="Index 1 Cycles.."  ng-readonly="1">
+                        </div>
+                        <div style="margin-top:10px;"
+                             data-ng-if="samplesheet_params.switchIndexes" data-ng-hide="!samplesheet_params.switchIndexes">
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.i2" class="form-control"
+                                   placeholder="Index 2 Cycles.."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="checkbox" ng-model="samplesheet_params.switchMode" data-nq-switch-button="" class="col-sm-3"
+                               data-theme="primary,stripped,rounded" data-ng-disabled="1"
+                               data-label-text="Run Mode" data-true-label="Rapid" data-false-label="Normal">
+                </div>
+
+                </div>
+                <div class="col-sm-12 controls" style="margin-top:10px;" data-ng-if="samplesheet_params.reagents !== null">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                SBS
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.reagents.sbs.kit" class="form-control"
+                                   placeholder="Sbs kit..."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                PE
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.reagents.pe.kit" class="form-control"
+                                   placeholder="Pe kit..."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                Index
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.reagents.index.kit" class="form-control"
+                                   placeholder="Index kit..."  ng-readonly="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 controls" style="margin-top:5px;" data-ng-if="samplesheet_params.reagents !== null">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-barcode"></i>
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.reagents.sbs.id" class="form-control"
+                                   placeholder="Sbs barcode..."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-barcode"></i>
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.reagents.pe.id" class="form-control"
+                                   placeholder="Pe barcode..."  ng-readonly="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-barcode"></i>
+                            </div>
+                            <input type="text" data-qo-display-type="input"
+                                   ng-model="samplesheet_params.reagents.index.id" class="form-control"
+                                   placeholder="Index barcode..."  ng-readonly="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 controls" style="margin-top:10px;" >
+                        <div class="col-sm-6 input-inline pull-right">
+                            <button type="button" class="btn btn-success pull-right"
+                                    data-ng-disabled="samplesheet_params.run_folder == null
+                                        || samplesheet_params.r1 == null
+                                        || samplesheet_params.i1 == null
+                                        || (samplesheet_params.switchReads && samplesheet_params.r2 == null)
+                                        || (samplesheet_params.switchIndexes && samplesheet_params.i2 == null)"
+                                    data-ng-click="ctrl.submit(samplesheet_params)">
+                                <span class="glyphicon glyphicon-link"></span>&nbsp;Link&nbsp;to&nbsp;Run
+                            </button>
+                        </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    </div>
+    <div class="panel panel-primary" style="margin-top:10px" ng-show="samplesheet_params.samplesheet.length > 0">
+    <div class="panel-body">
+        <div class="col-sm-12 controls" style="margin-top: 10px;">
+            <table class="table table-striped table-bordered ">
+                <tr ng-repeat="row in samplesheet_params.samplesheet track by $index">
+                    <td ng-repeat="field in row track by $index">
+                        {{field}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</div>

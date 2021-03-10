@@ -1,0 +1,109 @@
+<div data-ng-app="LabProductsModule" ng-controller="LabProductsCtrl as ctrl">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <form class="form-inline">
+                <div class="col-sm-12 controls" >
+                    <div class="btn-group  btn-group-reset" ng-model="buttons.radio" ng-init="buttons.radio = 'active'" data-nq-radio-group="">
+                        <label title="Middle Button" class="btn btn-primary"><input type="radio" value="active" data-ng-click="getLabProducts('active')">Active</label>
+                        <label title="Right Button" class="btn btn-primary"><input type="radio" value="deactivate" data-ng-click="getLabProducts('deactivate')">Deactivate</label>
+                        <!--<label title="Left Button" class="btn btn-primary"><input type="radio" value="all" data-ng-click="getLabProducts('all')">All</label>-->
+                    </div>
+                    <label title="published" ng-if="pagination.total > 0" class="btn btn-success  pull-right" style="margin-left:10px;">{{pagination.last}}/{{pagination.total}}</label>
+                    <label title="published" ng-if="pagination.total == 0" class="btn btn-success  pull-right" style="margin-left:10px;">{{pagination.total}}</label>
+                    <input type="text" ng-model="search" ng-if="pagination.total > 0" class="form-control pull-right" placeholder="Search...">
+                </div>
+            </form>
+
+            <div class="col-sm-12 controls" style="margin-top:10px;">
+                <table class="table table-striped table-hover table-bordered table-responsive" >
+                    <thead>
+                    <tr class="alert alert-success">
+                        <th>
+                            <div style="padding-left:10px;">
+                                <input type="checkbox"  value=""
+                                       data-ng-checked="checked_list.length == lab_products.length  && checked_list.length > 0"
+                                       data-ng-click="ctrl.toggle_all()">
+                        </div>
+                        </th>
+                        <th ng-click="sort('rights')">ID
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='rights'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th><th ng-click="sort('title')">Title
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('description')">Description
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('Manufacturer')">Manufacturer
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='manufacturer'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('unit')">Units
+                             <span class="glyphicon sort-icon" ng-show="sortKey=='unit'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('volume')">Volume
+                             <span class="glyphicon sort-icon" ng-show="sortKey=='price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('price')">Price
+                             <span class="glyphicon sort-icon" ng-show="sortKey=='price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('creatione_date')">Created
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='creation_date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('date')">Updated
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('review_state')">State
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='review_state'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th><span class="fic glyphicon glyphicon-wrench" ></span></th>
+                        <!--<th><span class="fic glyphicon glyphicon-blackboard" ></span></th>-->
+                    </tr>
+                    </thead>
+                    <tbody ng-if="lab_products.length > 0">
+                    <tr dir-paginate="row in lab_products | orderBy:sortKey:reverse|filter:search|itemsPerPage:pagination.page_size"
+                        total-items="pagination.total" current-page="pagination.current" ng-class="{'alert alert-danger': row.unit == 0,  'alert alert-warning': row.unit == 1}">
+                        <td>
+                            <div style="padding-left:10px;">
+                                <input type="checkbox"  value="{{row.id}}"
+                                       data-ng-checked="checked_list.indexOf(row.id) > -1"
+                                       data-ng-click="ctrl.toggle(row.id)">
+                            </div>
+                        </td> <td>
+                            <a class="pull-left" ui-sref="lab_product({labproduct_id: row.id})" style="text-decoration: none;">
+                                <span>{{row.rights}}</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="pull-left" ui-sref="lab_product({labproduct_id: row.id})" style="text-decoration: none;">
+                                <span>{{row.title}}</span>
+                            </a>
+                        </td>
+                        <td class="small">{{row.description}}</td>
+                        <td>{{ctrl.get_manufacturer(row.location)}}</td>
+                        <td>{{row.unit}}</td>
+                        <td>{{row.volume}}</td>
+                        <td>{{row.price}}</td>
+                        <td>{{ctrl.format_date(row.creation_date)}}</td>
+                        <td>{{ctrl.format_date(row.date)}}</td>
+                        <td>{{ctrl.format_review_state(row.review_state)}}</td>
+                        <td><ng-include src="'app/shared/review_state/lab_products.btns.mini.html'"></ng-include></td>
+                        <!--<td><ng-include src="'app/shared/blackboard/toggle.btns.mini.html'"></ng-include></td>-->
+                    </tr>
+                    </tbody>
+                </table>
+
+                <dir-pagination-controls
+                        max-size="10"
+                        direction-links="true"
+                        boundary-links="true"
+                        class="pull-right"
+                        on-page-change="ctrl.changePage(newPageNumber, oldPageNumber)"
+                        style="margin-top: -25px">
+                </dir-pagination-controls>
+
+            </div>
+            <div class="col-sm-12 controls" style="margin-top:10px;" ng-if="lab_products.length > 0">
+                <ng-include src="'app/shared/review_state/lab_products.btns.html'"></ng-include>
+            </div>
+        </div>
+    </div>
+</div>

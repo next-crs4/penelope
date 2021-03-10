@@ -1,0 +1,78 @@
+<button type="button" class="btn btn-success" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('draft')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('ready')">
+    <span class="glyphicon glyphicon-ok-circle">
+    </span>&nbsp;Set Ready
+</button>
+<button type="button" class="btn btn-default" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('ready')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('draft')">
+    <span class="glyphicon glyphicon-ban-circle">
+    </span>&nbsp;Set Draft
+</button>
+
+<button type="button" class="btn btn-primary" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('dispatched')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('delivered')">
+    <span class="glyphicon glyphicon-send">
+    </span>&nbsp;Set Delivered
+</button>
+<button type="button" class="btn btn-default" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('delivered')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('dispatched')">
+    <span class="glyphicon glyphicon-erase">
+    </span>&nbsp;Set Dispatched
+</button>
+<button type="button" class="btn btn-danger" aria-hidden="true"
+        data-ng-if="!ctrl.check_transitions('deleted')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('deleted')">
+    <span class="glyphicon glyphicon-ban-circle">
+    </span>&nbsp;Delete
+</button>
+<button type="button" class="btn btn-warning" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('processing')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('dispatched')">
+    <span class="glyphicon glyphicon-ban-circle">
+    </span>&nbsp;Set Dispatched
+</button>
+<button type="button" class="btn btn-warning" aria-hidden="true"
+        data-ng-disabled="checked_list.length == 0"
+        data-nq-collapse="" data-target-id="#collapseDeliveryCustomForm" data-collapsed="true">
+    <span class="glyphicon glyphicon-tags"></span>&nbsp;Custom
+</button>
+<div id="collapseDeliveryCustomForm"  class="panel panel-warning" style="margin-top:10px;">
+    <div class="panel-heading">
+        <div class="panel-title">Delivery Status</div>
+    </div>
+    <div class="panel-body">
+        <div class="col-sm-12 controls">
+            <div class="input-inline col-sm-3" >
+                <select data-nq-select=""
+                        data-qo-placeholder="Delivery Status..."
+                        data-qo-display-type="input"
+                        data-ng-model="params.delivery_status">
+                    <option value="draft">Draft</option>
+                    <option value="ready">Ready</option>
+                    <option value="processing">In Progress</option>
+                    <option value="dispatched">Dispatched</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="deleted">Deleted</option>
+                </select>
+            </div>
+            <div class="input-inline col-sm-3" >
+                <button type="button" class="btn btn-warning" aria-hidden="true"
+                        data-ng-click="ctrl.change_review_state(params.delivery_status)">
+                    <span class="glyphicon glyphicon-edit">
+                    </span>&nbsp;Set Delivery Status
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

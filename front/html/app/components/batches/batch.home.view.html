@@ -1,0 +1,18 @@
+<div style="padding-top:10px;"  data-ng-app="BatchesModule" data-ng-controller="BatchDetailsCtrl as ctrl">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="batchTabset" >
+            <div data-nq-tab="" data-heading="{{state.batch_id}}" >
+                <ng-include src="'app/components/batches/batch.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+
+            </div>
+            <div data-nq-tab="" data-heading="Batch Book">
+                <ng-include src="'app/components/batches/batchbook.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

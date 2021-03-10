@@ -1,0 +1,41 @@
+<button type="button" class="btn btn-warning" aria-hidden="true"
+        data-ng-disabled="checked_list.length == 0"
+        data-nq-collapse="" data-target-id="#collapseEditForm" data-collapsed="true">
+    <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+</button>
+<div id="collapseEditForm"  class="panel panel-default" style="margin-top:10px;">
+    <div class="panel-heading">
+        <div class="panel-title">Edit ARs & Samples</div>
+    </div>
+    <div class="panel-body">
+        <form name="editForm" class="form">
+        <div class="col-sm-12 controls">
+            <div class="col-sm-6">
+                <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </div>
+                        <input type="text" ng-model="edit_params.selectedDate" class="form-control"
+                               data-nq-datepicker="" data-qo-format="YYYY-MM-DD"
+                               placeholder="datepicker" name="selected_date">
+                </div>
+
+                    <div class="btn-group btn-group-reset" ng-model="edit_params.whichDate"
+                         data-nq-radio-group="" data-show-tick="true" style="margin-top:5px;">
+                        <label class="btn btn-default btn-xs"><input value="created_date" type="radio">Created</label>
+                        <label class="btn btn-default btn-xs"><input value="received_date" type="radio">Received </label>
+                        <label class="btn btn-default btn-xs"><input value="published_date" type="radio">Published</label>
+                    </div>
+            </div>
+        </div>
+        <div class="col-sm-12 controls" style="margin-top:10px;" >
+            <div class="col-sm-6 input-inline pull-right">
+                <button type="button" class="btn btn-success pull-right"
+                        data-ng-click="ctrl.edit(edit_params,checked_list)">
+                    <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

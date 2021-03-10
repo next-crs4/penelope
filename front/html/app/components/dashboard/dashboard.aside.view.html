@@ -1,0 +1,116 @@
+     <div id="leftMenuAside" data-nq-aside="myLeftAside" class="aside aside-with-menu"
+             data-collapsible="true"
+             data-top-offset="50px"
+             data-off-canvas="{{asideSettings.offCanvas}}"
+             data-pinnable="true"
+             data-opened="true"
+             data-collapsed="true"
+             data-enlarge-hover="{{asideSettings.enlargeHover}}"
+             data-ng-swipe-left="$aside.toggleCollapse(true);"
+             data-ng-swipe-right="$aside.toggleCollapse(false);">
+            <div class="aside-header">
+                <div class="aside-buttons">
+                    <span ng-show="myLeftAside.$collapsed" ng-click="$aside.toggleCollapse()" class="titip-right" data-title="Collapse"><i class="glyphicon glyphicon-arrow-right"></i></span>
+                    <span ng-hide="myLeftAside.$collapsed" ng-click="$aside.toggleCollapse()" class="titip-right" data-title="Collapse" style="margin-top:10px;"><i class="glyphicon glyphicon-arrow-left"></i></span>
+                    <span ng-hide="myLeftAside.$collapsed" ng-click="asideSettings.enlargeHover = !$aside.$pinned; $aside.togglePin();" class="titip-right" data-title="Toggle Pin"><i class="glyphicon glyphicon-pushpin"></i></span>
+                </div>
+                <span ng-hide="$aside.$collapsed" class="aside-title">
+                    <i class="fic glyphicon glyphicon-dashboard"></i>
+                    <span style="margin-left:10px;">Dashboard</span>
+                </span>
+
+            </div>
+            <div class="aside-body" style="overflow-y:auto;">
+
+                <ul class="nav nav-stacked">
+                    <li id='oversee' ng-style="params.choose === 'oversee' && {'background-color':'#eee'}">
+                        <a href="" target="_self"   ng-click="ctrl.goto('oversee')" >
+                            <i class="glyphicon glyphicon-eye-open" class="titip-right" data-title="Oversee"></i>
+                            <span ng-hide="$aside.$collapsed" class="menu-text">Oversee</span>
+                        </a>
+                    </li>
+                    <li id='runs_details' ng-style="params.choose === 'runs' && {'background-color':'#eee'}">
+                        <a href="" target="_self"   ng-click="ctrl.goto('runs')" >
+                            <i class="glyphicon glyphicon-road" class="titip-right" data-title="Runs"></i>
+                            <span ng-hide="$aside.$collapsed" class="menu-text">Runs</span>
+                        </a>
+                    </li>
+                    <!--<li id='batches'  ng-style="params.choose === 'batches' && {'background-color':'#eee'}">-->
+                        <!--<a href="" target="_self"  ng-click="ctrl.goto('batches')">-->
+                            <!--<i class="glyphicon glyphicon-book" class="titip-right" data-title="Batches"></i>-->
+                            <!--<span ng-hide="$aside.$collapsed" class="menu-text">Batches</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li id='clients'  ng-style="params.choose === 'clients' && {'background-color':'#eee'}">-->
+                        <!--<a href="" target="_self"  ng-click="ctrl.goto('clients')">-->
+                            <!--<i class="glyphicon glyphicon-cog" class="titip-right" data-title="Clients"></i>-->
+                            <!--<span ng-hide="$aside.$collapsed" class="menu-text">Clients</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#" data-nq-collapse="" data-target-id="#collapseExample">-->
+                            <!--<i class="glyphicon glyphicon-folder-close"></i>-->
+                            <!--<span ng-hide="$aside.$collapsed" class="menu-text">Collapse Example</span>-->
+                        <!--</a>-->
+                        <!--<ul id="collapseExample" class="nav nav-stacked" ng-hide="$aside.$collapsed">-->
+                            <!--<li>-->
+                                <!--<a href="#" data-nq-collapse="" data-target-id="#collapseExample2">-->
+                                    <!--<i class="glyphicon glyphicon-tasks"></i>-->
+                                    <!--<span ng-hide="$aside.$collapsed" class="menu-text">Collapse Example 2</span>-->
+                                <!--</a>-->
+                                <!--<ul id="collapseExample2" class="nav nav-stacked" ng-hide="$aside.$collapsed" style="padding-left:15px;">-->
+                                    <!--<li>-->
+                                        <!--<a href="#" style="padding-left:35px;">-->
+                                            <!--Sub Menu Collapse 2-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#" style="padding-left:35px;">-->
+                                            <!--Sub Menu Collapse 2-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#" style="padding-left:35px;">-->
+                                            <!--Sub Menu Collapse 2-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#" style="padding-left:35px;">-->
+                                            <!--Sub Menu Collapse 2-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">-->
+                                    <!--Sub Menu Collapse-->
+                                <!--</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">-->
+                                    <!--Sub Menu Collapse-->
+                                <!--</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">-->
+                                    <!--Sub Menu Collapse-->
+                                <!--</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+            <div class="aside-footer" style="padding-left:20px; line-height:35px;">
+                <p style="font-weight:bold; color:#fff; cursor:pointer;">
+                    <span ng-click="asideSettings.offCanvas = asideSettings.offCanvas == 'mobile' ? 'all': 'mobile'">
+                        <i class="glyphicon glyphicon-resize-horizontal"></i>
+                        <span ng-hide="$aside.$collapsed" class="menu-text">
+                            Toggle Off Canvas
+                        </span>
+                        {{myLeftAside.$choose}}
+                    </span>
+                </p>
+
+            </div>
+        </div>
+     <ng-include src="'app/components/dashboard/dashboard.body.view.html'"></ng-include>

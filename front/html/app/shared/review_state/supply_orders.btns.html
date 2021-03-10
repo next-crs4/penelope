@@ -1,0 +1,21 @@
+<button type="button" class="btn btn-default" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('activate')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('activate')">
+    <span class="glyphicon glyphicon-folder-open">
+    </span>&nbsp;Active
+</button>
+<button type="button" class="btn btn-danger" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('deactivate')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('deactivate')">
+    <span class="glyphicon glyphicon-folder-close">
+    </span>&nbsp;Deactive
+</button>
+<button type="button" class="btn btn-success" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('dispatch')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('dispatch')">
+    <span class="glyphicon glyphicon-euro">
+    </span>&nbsp;Dispatch
+</button>

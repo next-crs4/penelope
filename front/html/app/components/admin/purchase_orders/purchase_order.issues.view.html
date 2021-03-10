@@ -1,0 +1,46 @@
+<div class="col-sm-12" style="margin-top:10px;">
+    <div class="input-inline col-sm-4">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </div>
+            <input type="text" data-ng-required="true"
+                   title="order_number"
+                   class="form-control"
+                   ng-model="purchaseorder_params.order_number"
+                   placeholder="Order Number..."/>
+         </div>
+    </div>
+    <div class="input-inline col-sm-4">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </div>
+            <input type="text" data-ng-required="true"
+                   title="cig_number"
+                   class="form-control"
+                   ng-model="purchaseorder_params.cig_number"
+                   placeholder="CIG..."/>
+        </div>
+    </div>
+    <div class="input-inline col-sm-4">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="glyphicon glyphicon-calendar"></i>
+            </div>
+            <input type="text" ng-model="purchaseorder_params.order_date" class="form-control"
+                   data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                   placeholder="datepicker" data-ng-required="true" name="order_date" required>
+        </div>
+    </div>
+</div>
+<div class="col-sm-12 controls" style="margin-top:10px;">
+    <div class="col-sm-12 input-inline pull-right">
+        <button type="button" class="btn btn-success pull-right"
+                data-ng-click="ctrl.issue(purchaseorder_params)"
+                data-ng-disabled="purchaseorder_params.order_number == null || purchaseorder_params.cig_number == null
+                                || purchaseorder_params.order_date == null">
+            <span class="glyphicon glyphicon-copy"></span>&nbsp;Issue
+        </button>
+    </div>
+</div>

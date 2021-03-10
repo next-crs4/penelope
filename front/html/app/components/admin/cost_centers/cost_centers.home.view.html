@@ -1,0 +1,21 @@
+<div style="padding-top:10px;">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="demoTabset">
+            <div data-nq-tab="" data-heading="Cost Centers">
+                <ng-include src="'app/components/admin/cost_centers/cost_centers.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+            <div data-nq-tab="" data-heading="Create">
+                <ng-include src="'app/components/admin/cost_centers/cost_centers.add_new.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+            <div data-nq-tab="" data-heading="Reports">
+                <ng-include src="'app/components/admin/cost_centers/cost_centers.stats.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

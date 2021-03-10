@@ -1,0 +1,19 @@
+<div style="padding-top:10px;"  data-ng-app="ClientsModule" data-ng-controller="ClientDetailsCtrl as ctrl">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="clientTabset" >
+            <div data-nq-tab="" data-heading="{{state.client_id}}" >
+                <ng-include src="'app/components/clients/client.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+
+            </div>
+            <div data-nq-tab="" data-heading="Edit" data-ng-show="client_params != undefined">
+                <ng-include src="'app/components/clients/client.edit.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

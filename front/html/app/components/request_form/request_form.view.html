@@ -1,0 +1,204 @@
+<div data-ng-app="RequestFormModule" ng-controller="RequestFormCtrl as ctrl">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="col-sm-12 controls">
+                <div class="btn-group  btn-group-reset" ng-model="buttons.radio.what"
+                     ng-init="buttons.radio.what = 'all'" data-nq-radio-group="">
+                    <label title="Left Button" class="btn btn-primary"><input type="radio" value="all"
+                                                                              data-ng-click="">Sequencing & Library
+                        prep</label>
+                    <label title="Right Button" class="btn btn-primary"><input type="radio" value="sequencing"
+                                                                               data-ng-click="">Sequencing
+                        Only</label>
+                    <label title="Middle Button" class="btn btn-primary"><input type="radio" value="library_prep"
+                                                                                data-ng-click="">Library prep
+                        only</label>
+                </div>
+            </div>
+
+                <div class="input-inline col-sm-4 pull-left" style="margin-top:10px;">
+                            <select data-nq-select="" data-ng-required="true" name="project_type"
+                                    data-qo-placeholder="Project Type.."
+                                    data-ng-model="request_params.project_type"
+                                    ng-options="p.title for p in project_types" required>
+                            </select>
+                        </div>
+                        <div class="input-inline col-sm-4" style="margin-top:10px;">
+                            <div class="input-group">
+                                <div class="input-group-addon btn btn-xs" ng-click="ctrl.less_samples()">
+                                    <i class="glyphicon glyphicon-minus"></i>
+                                </div>
+                                <input type="text" ng-model="request_params.samples_number" class="form-control"
+                                       placeholder="Number of samples..." data-ng-required="true" required>
+                                <div class="input-group-addon btn btn-xs" ng-click="ctrl.more_samples()">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-inline col-sm-4" style="margin-top:10px;">
+                            &nbsp;
+                        </div>
+
+            <div class="col-sm-12 controls" style="margin-top:10px;" data-ng-if="buttons.radio.what != 'library_prep'">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-sm-12 controls">
+                            <div class="btn-group  btn-group-reset" ng-model="buttons.radio.match"
+                                 ng-init="buttons.radio.match = 'coverage'" data-nq-radio-group="">
+                                <label title="Left Button" class="btn btn-default"><input type="radio" value="coverage"
+                                                                                          data-ng-click="">Match by
+                                    Coverage</label>
+                                <label title="Right Button" class="btn btn-default"><input type="radio" value="reads"
+                                                                                           data-ng-click="">Match by
+                                    number of reads</label>
+
+                            </div>
+                        </div>
+                        <div data-ng-if="buttons.radio.match == 'coverage'" >
+                            <div class="input-inline col-sm-4 pull-left" style="margin-top:10px;">
+                                <input type="text" ng-model="request_params.genome_size" class="form-control"
+                                       placeholder="Targeted genome size..." data-ng-required="true" required>
+                            </div>
+                            <div class="input-inline col-sm-4" style="margin-top:10px;">
+                                <input type="text" ng-model="request_params.min_coverage" class="form-control"
+                                       placeholder="Minimum coverage per sample..." data-ng-required="true" required>
+                            </div>
+                            <div class="input-inline col-sm-4">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div data-ng-if="buttons.radio.match == 'reads'" >
+                            <div class="input-inline col-sm-4 pull-left" style="margin-top:10px;">
+                                <input type="text" ng-model="request_params.reads" class="form-control"
+                                       placeholder="Minimum number of reads per sample..." data-ng-required="true" required>
+                            </div>
+                            <div class="input-inline col-sm-4">
+                                &nbsp;
+                            </div>
+                            <div class="input-inline col-sm-4">
+                                &nbsp;
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+                <div class="col-sm-6 controls">
+                     <button type="button" class="btn btn-success pull-left" data-ng-click="ctrl.find_services(request_params)">
+                         <span class="glyphicon glyphicon-search"></span>&nbsp; Find Services
+                     </button>
+                </div>
+                <div class="col-sm-6 controls">
+                     <button type="button" data-ng-disabled="checked_list.length == 0" class="btn btn-primary pull-right"
+                             data-nq-toggle-modal="#screenModeModal" data-effect="from-left" data-qs-title="'Request Form'">
+                         <span class="glyphicon glyphicon-share"></span>&nbsp; Submit Request
+                     </button>
+                </div>
+
+
+        </div>
+    </div>
+    <div class="panel panel-primary" ng-if="analysis_services.length > 0">
+        <div class="panel-body">
+            <div class="col-sm-12 controls" style="margin-top:10px;">
+                <table class="table table-striped table-hover table-bordered table-responsive" >
+                    <thead>
+                        <tr class="alert alert-success">
+                            <th>
+                                <div style="padding-left:10px;">
+                                    <input type="checkbox"  value=""
+                                           data-ng-checked="checked_list.length == batches.length  && checked_list.length > 0"
+                                           data-ng-click="ctrl.toggle_all()">
+                                </div>
+                            </th>
+                            <th ng-click="sort('id')">ID
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('keyword')">Keyword
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='keyword'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('title')">Title
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('category')">Category
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='category'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('price')">Price
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('total_price')">Total Price
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='total_price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody ng-if="analysis_services.length > 0">
+                    <tr data-ng-repeat="row in analysis_services">
+                        <td>
+                            <div style="padding-left:10px;">
+                                <input type="checkbox"  value="{{row.id}}"
+                                       data-ng-checked="checked_list.indexOf(row.id) > -1"
+                                       data-ng-click="ctrl.toggle(row.id)">
+                            </div>
+                        </td>
+                        <td>
+                            <span>{{row.id}}</span>
+                        </td>
+                        <td>
+                            <span>{{row.keyword}}</span>
+                        </td>
+                        <td>
+                            <span>{{row.title}}</span>
+                        </td>
+                        <td>
+                            <span>{{row.category}}</span>
+                        </td>
+                        <td>
+                            <span>{{row.price}}</span>
+                        </td>
+                        <td>
+                            <span>{{row.total_price}}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="screenModeModal" class="clearfix" data-nq-modal="" data-qo-independent="true" data-qo-screen-mode="true" data-qo-content-template="">
+
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div class="col-sm-12 controls">
+                    <div class="form-group col-sm-4">
+                        <label for="name" class="control-label">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="your name">
+                    </div>
+                    <div class="form-group col-sm-4"">
+                        <label for="surname" class="control-label">
+                            Surname <span data-help-tip="" class="ng-scope tip"><i class="fic fu-help"></i></span>
+                        </label>
+                        <input type="text" class="form-control" id="surname" placeholder="your surname">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="email" class="control-label">Email address</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-minus"></i></span>
+                            <input class="form-control" id="email" placeholder="Enter email" type="email">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 controls">
+                    <div class="form-group col-sm-10"">
+                        <label for="surname" class="control-label">
+                            Surname <span data-help-tip="" class="ng-scope tip"><i class="fic fu-help"></i></span>
+                        </label>
+                        <input type="text" class="form-control" id="surname" placeholder="your surname">
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

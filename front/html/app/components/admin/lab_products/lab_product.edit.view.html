@@ -1,0 +1,82 @@
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form name="addLabProductForm" class="form">
+            <div class="col-sm-12" style="margin-top:10px;">
+                <div class="input-inline col-sm-3">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-barcode"></i>
+                        </div>
+                        <input type="text" ng-model="labproducts_params.barcode" class="form-control"
+                               placeholder="Catalog ID..."
+                               data-ng-required="true" required>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" ng-model="labproducts_params.title" class="form-control"
+                               placeholder="Title..." data-ng-required="true" required>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-5">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" ng-model="labproducts_params.description" class="form-control"
+                               placeholder="Description...">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;">
+                <div class="input-inline col-sm-3">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-tint"></i>
+                        </div>
+                        <input type="text" ng-model="labproducts_params.volume" class="form-control"
+                               placeholder="Volume..." data-ng-required="true" required>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-euro"></i>
+                        </div>
+                        <input type="text" ng-model="labproducts_params.price" class="form-control"
+                               placeholder="Price...">
+                    </div>
+                </div>
+                 <div class="input-inline col-sm-5">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-oil"></i>
+                        </div>
+                         <select data-nq-select="" data-ng-required="true"
+                                    data-qo-placeholder="Manufacturers.." name="manufacturers"
+
+                                    data-qo-display-type="input"
+                                    data-ng-model="labproducts_params.manufacturer"
+                                    data-ng-options="m.title for m in manufacturers">
+                         </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 controls" style="margin-top:10px;" >
+                <div class="col-sm-12 input-inline pull-right">
+                    <button type="button" class="btn btn-success pull-right"
+                            data-ng-click="ctrl.edit_lab_product(labproducts_params)"
+                            data-ng-disabled="labproducts_params.barcode.length==0 || labproducts_params.barcode == null
+                            || labproducts_params.title.length==0 || labproducts_params.title == null
+                            || labproducts_params.volume.length==0 || labproducts_params.volume == null
+                            || labproducts_params.price.length==0 || labproducts_params.price == null">
+                        <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

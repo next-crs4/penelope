@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  back:
+    build: .
+    container_name: bk01
+    command: >
+      bash -c "sh /back/script/penelope_read_service.sh start && sh /back/script/penelope_write_service.sh start"
+    volumes:
+      - .:/back
+    ports:
+      - "8086:8086"
+      - "8088:8088"
+

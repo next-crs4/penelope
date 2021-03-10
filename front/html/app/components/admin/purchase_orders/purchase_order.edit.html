@@ -1,0 +1,116 @@
+<form name="editPurchaseOrderForm" class="form">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="col-sm-12" style="margin-top:10px;">
+                <div class="input-inline col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" data-ng-required="true"
+                               title="title"
+                               class="form-control"
+                               ng-model="edit_params.title"
+
+                               placeholder="Acronym..."/>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" class="form-control" data-ng-required="true"
+                               ng-model="edit_params.description" data-name="description"
+
+                               placeholder="Description...">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;">
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-tower"></i>
+                        </div>
+                        <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                                data-qo-placeholder="Supplier.." name="supplier"
+                                data-ng-model="edit_params.supplier"
+                                data-ng-options="s.name for s in suppliers">
+                        </select>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-euro"></i>
+                        </div>
+                        <input type="text" data-ng-required="true"
+                               title="amount"
+                               class="form-control"
+                               ng-model="edit_params.amount"
+
+                               placeholder="Amount..."/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;" ng-if="purchase_order.review_state!=='due'">
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" data-ng-required="true"
+                               title="order_number"
+                               class="form-control"
+                               ng-model="edit_params.order_number"
+                               placeholder="Order Number..."/>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </div>
+                        <input type="text" data-ng-required="true"
+                               title="cig_number"
+                               class="form-control"
+                               ng-model="edit_params.cig_number"
+                               placeholder="CIG..."/>
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </div>
+                        <input type="text" ng-model="edit_params.order_date" class="form-control"
+                               data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                               placeholder="datepicker" data-ng-required="true" name="order_date" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;" ng-if="purchase_order.review_state==='completed'">
+                <div class="input-inline col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>&nbsp;Closing
+                        </div>
+                        <input type="text" ng-model="edit_params.closing_date" class="form-control"
+                               data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                               placeholder="datepicker" data-ng-required="true" name="closing_date" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 controls" style="margin-top:10px;">
+                <div class="col-sm-12 input-inline pull-right">
+                    <button type="button" class="btn btn-success pull-right"
+                            data-ng-click="ctrl.edit(edit_params)"
+                            data-ng-disabled="edit_params==undefined">
+                        <span class="glyphicon glyphicon-edit"></span>&nbsp; Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

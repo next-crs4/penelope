@@ -1,0 +1,73 @@
+<!--<span>
+    <button type="button" class="btn btn-primary btn-xs" aria-hidden="true" data-nq-popover=""
+        data-ng-if="ctrl.check_transitions('assign', a.transitions)">
+        <span class="glyphicon glyphicon-list-alt"
+              data-qo-theme="info" data-qo-placement="left"
+              data-nq-tooltip="" data-qs-title="Assign to a worksheet">
+              &lt;!&ndash;data-ng-click="ctrl.change_workflow_review_state('assign', row.id, a.id)">&ndash;&gt;
+        </span>
+    </button>
+        <div class="popover controls" >
+                            <h3 class="popover-title">Assign analysis to a Workesheet</h3>
+                            <div class="popover-content">
+
+                                    <div class="input-inline col-sm-12">
+                                        <select data-nq-select="" data-qo-placeholder="Worksheets..."
+                                                data-qo-container=""
+                                                data-ng-options="w.title for w in worksheets"
+                                                data-ng-model="assign_params.worksheet">
+                                        </select>
+                                    </div>
+                                    <div class="input-inline col-sm-12" style="margin-top:10px">
+                                        <select data-nq-select="" data-qo-placeholder="Analyst..."
+                                                data-qo-container=""
+                                                data-ng-options="u.fullname for u in analysts"
+                                                data-ng-model="assign_params.analyst">
+
+
+                                        </select>
+                                    </div>
+
+                                <div class="col-sm-12" style="margin-bottom:10px; margin-top:10px">
+
+                                    <button type="button" class="btn btn-primary pull-right" aria-hidden="true">
+                                        <span class="glyphicon glyphicon-list-alt"
+                                              data-qo-theme="info" data-qo-placement="left"
+                                              data-nq-tooltip="" data-qs-title="Assign to a worksheet"
+                                              data-ng-click="ctrl.change_workflow_review_state('assign', row.id, a.id)">
+                                        </span>&nbsp;Assign
+                                    </button>
+                                </div>
+        </div>
+</div>
+</span>-->
+<span>
+    <button type="button" class="btn btn-primary btn-xs" aria-hidden="true"
+            data-ng-if="ctrl.check_transitions('submit', a.transitions)">
+        <span class="glyphicon glyphicon-new-window"
+              data-qo-theme="info" data-qo-placement="right"
+              data-nq-tooltip="" data-qs-title="Submit for verification"
+              data-ng-click="ctrl.change_workflow_review_state('submit', row.id, a.id)">
+        </span>
+    </button>
+</span>
+<span>
+    <button type="button" class="btn btn-success btn-xs" aria-hidden="true"
+            data-ng-if="ctrl.check_transitions('verify', a.transitions)">
+        <span class="glyphicon glyphicon-check"
+              data-qo-theme="info" data-qo-placement="right"
+              data-nq-tooltip="" data-qs-title="Verify"
+              data-ng-click="ctrl.change_workflow_review_state('verify', row.id, a.id)">
+        </span>
+    </button>
+</span>
+<span>
+    <button type="button" class="btn btn-success btn-xs" aria-hidden="true"
+            data-ng-if="ctrl.check_transitions('publish', a.transitions)">
+        <span class="glyphicon glyphicon-globe"
+              data-qo-theme="info" data-qo-placement="right"
+              data-nq-tooltip="" data-qs-title="Publish result"
+              data-ng-click="ctrl.change_workflow_review_state('publish', row.id, a.id)">
+        </span>
+    </button>
+</span>

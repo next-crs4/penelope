@@ -1,0 +1,55 @@
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div class="col-sm-12 controls">
+            <div class="col-sm-4 controls">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Target:</td>
+                        <td>{{target.title}}</td>
+                    </tr>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{target.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Creation Date:</td>
+                        <td>{{ctrl.format_date(target.creation_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>State:</td>
+                        <td>{{ctrl.format_review_state(target.review_state)}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-4 controls">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Purchase&nbsp;Orders:</td>
+                        <td>{{ctrl.get_purchase_orders()}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total&nbsp;Amount:</td>
+                        <td>{{ctrl.get_total_amount()}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div data-nq-tabset="" data-tabset-model="purchaseordersTabset">
+            <div data-nq-tab="" data-heading="Purchase Orders">
+                <ng-include src="'app/components/admin/targets/purchase_orders.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+            </div>
+            <!--<div data-nq-tab="" data-heading="Cost Centers">-->
+                <!--<ng-include src="'app/components/clients/cost_centers.view.html'"></ng-include>-->
+                <!--<div ng-bind-html="tabParagraph">-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>

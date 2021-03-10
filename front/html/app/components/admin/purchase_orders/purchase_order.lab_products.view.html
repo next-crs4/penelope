@@ -1,0 +1,118 @@
+<form class="form-inline">
+    <div class="col-sm-12 controls">
+        <label title="published" class="btn btn-success  pull-right"
+               style="margin-left:10px;">{{reagents.length}}</label>
+        <input type="text" ng-model="search"  class="form-control pull-right"
+               placeholder="Search...">
+    </div>
+</form>
+<div class="col-sm-12 controls" style="margin-top:10px;">
+    <table class="table table-striped table-hover table-bordered table-responsive">
+        <thead>
+        <tr class="alert alert-success">
+            <th>
+                <div style="padding-left:10px;">
+                    <input type="checkbox" value=""
+                           data-ng-checked="checked_list.length == reagents.length  && checked_list.length > 0"
+                           data-ng-click="ctrl.toggle_all()">
+                </div>
+            </th>
+            <th ng-click="sort('title')">Name
+                <span class="glyphicon sort-icon" ng-show="sortKey=='title'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('rights')">Order Number
+                <span class="glyphicon sort-icon" ng-show="sortKey=='description'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('location')">Storage Location
+                <span class="glyphicon sort-icon" ng-show="sortKey=='description'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('expiration_date')">Expiration
+                <span class="glyphicon sort-icon" ng-show="sortKey=='date'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('effective_date')">Received date
+                <span class="glyphicon sort-icon" ng-show="sortKey=='date'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('review_state')">State
+                <span class="glyphicon sort-icon" ng-show="sortKey=='review_state'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th><span class="fic glyphicon glyphicon-wrench"></span></th>
+        </tr>
+        </thead>
+        <tbody ng-if="reagents.length > 0">
+        <tr data-ng-repeat="row in reagents | orderBy:sortKey:reverse|filter:search"
+            ng-class="{'alert alert-danger': ctrl.check_expiration(row.expiration_date)<=0, 'alert alert-warning': ctrl.check_expiration(row.expiration_date)<=30}">
+            <td>
+                <div style="padding-left:10px;">
+                    <input type="checkbox" value="{{row.id}}"
+                           data-ng-checked="checked_list.indexOf(row.id) > -1"
+                           data-ng-click="ctrl.toggle(row.id)">
+                </div>
+            </td>
+            <td>{{ctrl.get_labproduct_title(row.title)}}</td>
+            <td>{{purchase_order.order_number}}</td>
+            <td>
+                <span ng-if="row.review_state !== 'due'">{{ctrl.get_storage_location(row.location)}}</span>
+                <span ng-if="row.review_state === 'due'">
+                    <div class="input-inline col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-inbox"></i>
+                                </div>
+                                <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                                        data-qo-placeholder="Storage Locations.."
+                                        data-ng-model="reagents_params.storage_locations[row.id]"
+                                        data-ng-options="s.title for s in storage_locations">
+                                </select>
+                            </div>
+                    </div>
+                </span>
+            </td>
+            <td>
+                <span ng-if="row.review_state !== 'due'">{{ctrl.format_date(row.expiration_date)}}</span>
+                <span ng-if="row.review_state === 'due'">
+                    <div class="input-inline col-sm-12">
+                         <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            <input type="text" ng-model="reagents_params.expiration_date[row.id]" class="form-control"
+                                   data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                                   placeholder="Expiration Date" data-ng-required="true" name="expiration_date" required>
+                         </div>
+                    </div>
+                </span>
+            </td>
+            <td>
+                <span ng-if="row.review_state !== 'due'">{{ctrl.format_date(row.effective_date)}}</span>
+                <span ng-if="row.review_state === 'due'">
+                    <div class="input-inline col-sm-12">
+                         <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            <input type="text" ng-model="reagents_params.received_date[row.id]" class="form-control"
+                                   data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                                   placeholder="Received Date" data-ng-required="true" name="expiration_date" required>
+                         </div>
+                    </div>
+                </span>
+            </td>
+            <td>{{ctrl.format_review_state(row.review_state)}}</td>
+            <td>
+                <ng-include src="'app/shared/review_state/purchase_orders.btns.mini.html'"></ng-include>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+<div class="col-sm-12 controls" style="margin-top:10px;" ng-if="reagents.length > 0">
+    <ng-include src="'app/shared/review_state/purchase_orders.btns.html'"></ng-include>
+</div>

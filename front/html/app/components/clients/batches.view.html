@@ -1,0 +1,117 @@
+<form class="form-inline">
+    <div class="col-sm-12 controls">
+        <div class="btn-group  btn-group-reset" ng-model="buttons.radio" ng-init="buttons.radio = 'open'"
+             data-nq-radio-group="">
+            <label title="Rightest Button" class="btn btn-primary"><input type="radio" value="all"
+                                                                          data-ng-click="getBatches('all')">All</label>
+            <label title="Left Button" class="btn btn-primary"><input type="radio" value="open"
+                                                                      data-ng-click="getBatches('open')">Open</label>
+            <label title="Middle Button" class="btn btn-primary"><input type="radio" value="closed"
+                                                                        data-ng-click="getBatches('closed')">Closed</label>
+            <label title="Right Button" class="btn btn-primary"><input type="radio" value="cancelled"
+                                                                       data-ng-click="getBatches('cancelled')">Cancelled</label>
+
+        </div>
+        <label title="published" ng-if="client.batches.length > 0" class="btn btn-success  pull-right"
+               style="margin-left:10px;">{{batches.length}}/{{client.batches.length}}</label>
+        <label title="published" ng-if="client.batches.length == 0" class="btn btn-success  pull-right"
+               style="margin-left:10px;">{{client.batches.length}}</label>
+        <input type="text" ng-model="search_batches" ng-show="client.batches.length > 0" class="form-control pull-right"
+               placeholder="Search...">
+    </div>
+</form>
+<div class="col-sm-12 controls" style="margin-top:10px;">
+    <table class="table table-striped table-hover table-bordered table-responsive">
+        <thead>
+        <tr class="alert alert-success">
+            <th>
+                <div style="padding-left:10px;">
+                    <input type="checkbox" value=""
+                           data-ng-checked="checked_list.batches.length == batches.length  && checked_list.batches.length > 0"
+                           data-ng-click="ctrl.toggle_all_batches()">
+                </div>
+            </th>
+            <th ng-click="sort('id')">BatchID
+                <span class="glyphicon sort-icon" ng-show="sortKey=='id'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('title')">Title
+                <span class="glyphicon sort-icon" ng-show="sortKey=='title'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('description')">Description
+                <span class="glyphicon sort-icon" ng-show="sortKey=='description'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('cost_center')">Cost Center
+                <span class="glyphicon sort-icon" ng-show="sortKey=='cost_center'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th ng-click="sort('date')">Date
+                <span class="glyphicon sort-icon" ng-show="sortKey=='date'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th>Samples</th>
+            <th ng-click="sort('review_state')">State
+                <span class="glyphicon sort-icon" ng-show="sortKey=='review_state'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th><span class="fic glyphicon glyphicon-wrench"></span></th>
+            <!--<th><span class="fic glyphicon glyphicon-blackboard" ></span></th>-->
+        </tr>
+        </thead>
+        <tbody ng-if="batches.length > 0">
+        <tr dir-paginate="row in batches | orderBy:sortKey:reverse|filter:search_batches|itemsPerPage:pagination.page_size"
+            total-items="pagination.total" current-page="pagination.current">
+            <td>
+                <div style="padding-left:10px;">
+                    <input type="checkbox" value="{{row.id}}"
+                           data-ng-checked="checked_list.batches.indexOf(row.id) > -1"
+                           data-ng-click="ctrl.toggle_batches(row.id)">
+                </div>
+            </td>
+            <td>
+                <a class="pull-left" ui-sref="batch({batch_id: row.id})" style="text-decoration: none;">
+                    <span>{{row.id}}</span>
+                </a>
+
+            </td>
+            <td>
+                <a class="pull-left" ui-sref="batch({batch_id: row.id})" style="text-decoration: none;">
+                    <span>{{row.title}}</span>
+                </a>
+
+            </td>
+            <td><a class="pull-left" ui-sref="batch({batch_id: row.id})" style="text-decoration: none;"><span>{{row.description}}</span></a>
+            </td>
+            <td>
+                <a class="pull-left" ui-sref="cost_center({costcenter_id: row.cost_center})" style="text-decoration: none;">
+                    <span>{{row.cost_center}}</span>
+                </a>
+            </td>
+            <td>{{ctrl.format_date(row.creation_date)}}</td>
+            <td>{{samples[row.id]}}
+                <div style="margin-top:10px"
+                     data-ng-if="!samples[row.id]"
+                     spinner-on="!samples[row.id]"
+                     us-spinner="{radius:20,
+                                  lines:10,
+                                  length:15,
+                                  width: 20,
+                                  scale:0.20,
+                                  speed: 1.5,
+                                  opacity:0.10,
+                                  corners: 1,
+                                  position: 'relative'}"></div>
+            </td>
+            <td>{{ctrl.format_review_state(row.review_state)}}</td>
+            <td>
+                <ng-include src="'app/components/clients/review_state.batches.btns.mini.html'"></ng-include>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="col-sm-12 controls" style="margin-top:10px;margin-bottom:10px;" ng-if="batches.length > 0">
+    <ng-include src="'app/components/clients/review_state.batches.btns.html'"></ng-include>
+</div>

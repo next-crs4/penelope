@@ -1,0 +1,7 @@
+python-daemon
+lockfile
+comoda==0.4.0
+bottle
+Paste
+lxml
+git+https://github.com/gmauro/alta.git

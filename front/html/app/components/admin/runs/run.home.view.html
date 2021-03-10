@@ -1,0 +1,12 @@
+<div style="padding-top:10px;" data-ng-app="RunsModule" data-ng-controller="RunDetailsCtrl as ctrl">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="demoTabset">
+            <div data-nq-tab="" data-heading="{{state.rd_label}}">
+                <ng-include src="'app/components/admin/runs/run.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

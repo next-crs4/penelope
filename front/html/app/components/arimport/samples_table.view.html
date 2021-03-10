@@ -1,0 +1,54 @@
+<div style="margin-bottom: 5px">
+    <form class="form-inline">
+					<div class="col-sm-12 controls" >
+						<input type="text" ng-model="search" class="form-control pull-right" placeholder="Search...">
+					</div>
+    </form>
+    <div class="col-sm-12 controls" style="margin-top:10px;">
+    <table class="table table-striped table-hover table-bordered table-responsive" >
+					<thead>
+						<tr class="alert alert-success">
+							<th ng-if="arimport_params.selectedSampleType.title==='MISEQ' || arimport_params.selectedSampleType.title==='FLOWCELL' || arimport_params.selectedSampleType.title==='POOL'">#
+
+							</th>
+							<th ng-if="arimport_params.selectedSampleType.title!='MISEQ' && arimport_params.selectedSampleType.title!='FLOWCELL' && arimport_params.selectedSampleType.title!='POOL'">#
+
+							</th>
+							<th ng-click="sort('sample')">Sample
+								<span class="glyphicon sort-icon"
+									  ng-show="sortKey=='sample'"
+									  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>
+							<th ng-repeat="h in header"
+								ng-click="sort(arimport_ctrl.format_csv_field(h))">{{arimport_ctrl.format_csv_field(h)}}
+								<span class="glyphicon sort-icon"
+									  ng-show="sortKey==arimport_ctrl.format_csv_field(h)"
+									  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+
+							</th>
+							<!--<th ng-click="sort('volume')">Volume
+								<span class="glyphicon sort-icon" ng-show="sortKey=='volume'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>-->
+						</tr>
+					</thead>
+					<tbody>
+						<tr dir-paginate="row in arimport_params.client_samples | orderBy:sortKey:reverse|filter:search|itemsPerPage:250">
+
+							<td ng-if="arimport_params.selectedSampleType.title==='MISEQ' || arimport_params.selectedSampleType.title==='FLOWCELL' || arimport_params.selectedSampleType.title==='POOL'">{{arimport_ctrl.format_ordinal(row.index-1)}}</td>
+							<td ng-if="arimport_params.selectedSampleType.title!='MISEQ' && arimport_params.selectedSampleType.title!='FLOWCELL' && arimport_params.selectedSampleType.title!='POOL'">{{row.ordinal}}</td>
+							<td>{{row.sample}}</td>
+							<td data-ng-repeat="h in header">{{row[arimport_ctrl.format_csv_field(h)]}}</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<dir-pagination-controls
+					max-size="10"
+					direction-links="true"
+					boundary-links="true"
+					class="pull-right"
+					style="margin-top: -25px">
+				</dir-pagination-controls>
+
+    </div>
+</div>

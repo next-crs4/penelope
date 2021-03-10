@@ -1,0 +1,114 @@
+<div class="panel-body" style="min-height:200px;">
+    <div class="col-sm-12 controls">
+        <div class="col-sm-2" controls>
+            <div class="btn-group  btn-group-reset" ng-model="chart.modes.period"
+                 ng-init="chart.modes.period = 'yearly'" data-nq-radio-group="">
+                <label title="Left Button" class="btn btn-primary"><input type="radio" value="yearly"
+                                                                          data-ng-click="getTimeline('modes', true)">Yearly</label>
+                <label title="Middle Button" class="btn btn-primary"><input type="radio" value="monthly"
+                                                                            data-ng-click="getTimeline('modes', true)">Monthly</label>
+            </div>
+        </div>
+        <div class="col-sm-3 controls">
+            <div class="input-group" ng-show="counter.runs > 0">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-stats"></i></span>
+                <select data-nq-select="" data-ng-required="true" name="chart_type"
+                        data-qo-placeholder="Chart .."
+                        data-ng-model="chart.modes.type"
+                        ng-options="t for t in chart_types">
+
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-2 controls">
+            <div class="input-group" ng-show="counter.runs > 0">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i></span>
+                <input type="text" ng-model="chart.modes.date_from" class="form-control"
+                       value="chart.modes.date_from"
+                       data-nq-datepicker="" qo-format="YYYY/MM/DD"
+                       qo-mode='date' qo-model-type="string"
+                       placeholder="datepicker" name="order_date">
+            </div>
+        </div>
+        <div class="col-sm-2 controls">
+            <div class="input-group" ng-show="counter.runs > 0">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i></span>
+                <input type="text" ng-model="chart.modes.date_to" class="form-control"
+                       value="chart.modes.date_to"
+                       data-nq-datepicker="" data-qo-format="YYYY/MM/DD"
+                       qo-mode='date' data-qo-model-Type="string"
+                       placeholder="datepicker" name="order_date">
+            </div>
+        </div>
+        <div class="col-sm-1 controls">
+            <button type="button" data-nq-dropdown="" class="btn btn-default btn-sm pull-left" ng-show="counter.runs > 0">
+                <i class="fic glyphicon glyphicon-download-alt"></i>
+            </button>
+            <ul class="dropdown-menu" tabindex="-1" role="menu">
+                <li tabindex="-1" role="presentation">
+                    <a href="" role="menuitem"
+                       ng-csv="chart.modes.csv_chart"
+                       csv-label="true" filename="chart.modes.{{chart.modes.period}}.csv">
+                        <i class="glyphicon glyphicon-stats"></i>&nbsp;Chart Data</a>
+                </li>
+                 <li tabindex="-1" role="presentation">
+                    <a href="" role="menuitem"
+                       ng-csv="chart.modes.csv_query"
+                       csv-label="true"  filename="query.modes.{{chart.modes.period}}.csv">
+                        <i class="glyphicon glyphicon-cd"></i>&nbsp;Query Data</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-2 controls">
+            <label title="modes" ng-if="counter.runs >= 0" class="btn btn-success  pull-right"
+                   style="margin-left:10px;">{{counter.runs}}</label>
+            <label title="modes" ng-if="counter.runs < 0" class="btn btn-success  pull-right"
+                   style="margin-left:10px;">
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            </label>
+        </div>
+    </div>
+    <div class="col-sm-12 controls" style="margin-top:20px;">
+        <div style="margin-top:30px"
+             data-ng-if="counter.runs < 0"
+             spinner-on="counter.runs < 0"
+             us-spinner="{
+                                      radius: 30,
+                                      lines:13,
+                                      length: 35,
+                                      width: 8,
+                                      scale: 1,
+                                      speed: 1.5,
+                                      opacity:0.1,
+                                      corners: 1,
+                                      color:'#000',
+                                      position: 'relative',
+                                      trail: 60,
+                                      shadow: true,
+                                    }">
+
+        </div>
+        <canvas class="chart chart-bar" ng-show="chart.modes.type==='Bar'"
+                chart-data="chart.modes.data" chart-labels="chart.modes.labels" data-ng-if="counter.runs > 0"
+                chart-series="chart.modes.series" chart-options="chart.modes.options">
+        </canvas>
+
+        <canvas class="chart chart-horizontal-bar" ng-show="chart.modes.type==='Horizontal Bar'"
+                chart-data="chart.modes.data" chart-labels="chart.modes.labels" data-ng-if="counter.runs > 0"
+                chart-series="chart.modes.series" chart-options="chart.modes.options">
+        </canvas>
+    </div>
+    <div class="col-sm-12 controls" style="margin-top:20px;" data-ng-if="counter.runs >= 0">
+        <div class="input-inline col-sm-4">&nbsp;</div>
+        <div class="input-inline col-sm-2">
+
+        </div>
+        <div class="input-inline col-sm-2">
+
+        </div>
+        <div class="input-inline col-sm-4">&nbsp;</div>
+    </div>
+</div>

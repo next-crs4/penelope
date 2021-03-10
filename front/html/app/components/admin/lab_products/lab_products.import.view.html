@@ -1,0 +1,58 @@
+<div data-ng-app="LabProductsModule" ng-controller="ImportLabProductsCtrl as ctrl">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <form name="arimportForm" class="form">
+
+                <div class="col-sm-12 controls">
+                    <div class="input-inline col-sm-2">
+                        <file-field class="btn"
+                                    ng-class="{'btn-success': (import_params.inventory !== null && import_params.inventory.length >0),
+                                               'btn-info': (import_params.inventory === null)}"
+                                    ng-model="import_params.attachment" data-ng-required="False">
+                            <span>Upload CSV</span>
+                        </file-field>
+                    </div>
+                    <div class="input-inline col-sm-6">
+                        <input type="text" class="form-control"  ng-model="import_params.attachment.name"
+                               placeholder="CSV Inventory - ID,Name,Description,Volume,Price" value="{{import_params.attachment.name}}">
+                    </div>
+                    <div class="input-inline col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-oil"></i>
+                            </div>
+                             <select data-nq-select="" data-ng-required="true" data-min-required="1"
+                                        data-qo-placeholder="Manufacturers.." name="manufacturers"
+                                        data-qo-max-length="0" data-name="manufacturers"
+
+                                        data-qo-display-type="input"
+                                        data-ng-model="import_params.manufacturer"
+                                        data-ng-options="m.title for m in manufacturers">
+                             </select>
+                        </div>
+                   </div>
+                </div>
+                <div class="col-sm-12 controls" style="margin-top:10px;" >
+                    <div class="col-sm-12 input-inline pull-right">
+                        <button type="button" class="btn btn-success pull-right"
+                                data-ng-click="ctrl.import(import_params)"
+                                data-ng-disabled="import_params.inventory == null || import_params.manufacturer == null">
+                            <span class="glyphicon glyphicon-import"></span>&nbsp;Import
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-primary" style="margin-top:10px;" ng-if="import_params.inventory.length > 0">
+        <div class="panel-heading">
+			<div class="panel-title">{{import_params.inventory.length}} reagent<span data-ng-if="import_params.inventory.length > 1">s</span>
+            </div>
+		</div>
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <ng-include src="'app/components/admin/lab_products/lab_products.import.table.view.html'"></ng-include>
+                </div>
+            </div>
+    </div>
+</div>

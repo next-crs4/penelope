@@ -1,0 +1,14 @@
+<button type="button"
+        class="btn btn-success btn-xs"
+        aria-hidden="true"
+        ng-if="!ctrl.inBlackBoard(row.id)"
+        ng-click="ctrl.add_to_blackboard(Array(row.id))">
+    <span class="glyphicon glyphicon-plus-sign"></span>
+</button>
+<button type="button"
+        class="btn btn-danger btn-xs"
+        aria-hidden="true"
+        ng-if="ctrl.inBlackBoard(row.id)"
+        ng-click="ctrl.remove_from_blackboard(Array(row.id))">
+    <span class="glyphicon glyphicon-minus-sign"></span>
+</button>

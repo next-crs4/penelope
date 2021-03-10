@@ -1,0 +1,20 @@
+<button type="button" class="btn btn-primary" aria-hidden="true"
+        ng-csv="attachment.content" lazy-load="true" filename="{{ctrl.get_filename()}}" field-separator=",">
+    <span class="glyphicon glyphicon-export"></span>&nbsp;Export&nbsp;CSV
+</button>
+<button type="button" class="btn btn-primary" aria-hidden="true"
+        ng-if="attachment.sample_list.length>0"
+        ng-csv="attachment.sample_list" lazy-load="true"
+        filename="{{ctrl.get_filename()}}" field-separator=",">
+    <span class="glyphicon glyphicon-export"></span>&nbsp;Export&nbsp;SampleList
+</button>
+<button type="button" class="btn btn-success" aria-hidden="true" data-ng-show="ctrl.hide==undefined" data-ng-click="ctrl.link2Run(attachment.content)">
+    <span class="glyphicon glyphicon-link"></span>&nbsp;Link&nbsp;to&nbsp;Run
+</button>
+<!--
+<button type="button" class="btn btn-primary" aria-hidden="true"
+        data-ng-if="ctrl.check_attachment_type('samplesheet')"
+        ng-csv="attachment.content" lazy-load="true" filename="{{ctrl.get_filename()}}" field-separator=",">
+    <span class="glyphicon glyphicon-equalizer"
+          data-ng-click="ctrl.nglims_samplesheet()"></span>&nbsp;IEM&nbsp;Samplesheet
+</button>-->

@@ -1,0 +1,125 @@
+<div class="col-sm-12">
+    <div class="col-sm-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Samples Due
+                </div>
+            </div>
+            <div class="panel-body" style="height:310px;">
+                <div style="margin-top:70px"
+                     ng-show="counter.sample_due < 0 || counter.active < 0"
+                     spinner-on="counter.sample_due < 0 || counter.active < 0"
+                     us-spinner="{
+                                      radius: 30,
+                                      lines:13,
+                                      length: 35,
+                                      width: 8,
+                                      scale: 1,
+                                      speed: 1.5,
+                                      opacity:0.1,
+                                      corners: 1,
+                                      color:'#000',
+                                      position: 'relative',
+                                      trail: 60,
+                                      shadow: true,
+                                    }">
+
+                </div>
+                <a ui-sref="analysis_requests({review_state: 'sample_due'})">
+                    <div id="divSampleDue" ng-show="counter.sample_due >= 0 && counter.active > 0"
+                         style="width: 80%; height: 80%; float:right; box-sizing: border-box; background:#FFFFFF;"></div>
+
+                    <label class="btn btn-success btn-lg"
+                           data-ng-show="counter.sample_due >= 0 && counter.active > 0"
+                           style="margin-bottom:10px;margin-left:10px;">
+                        {{counter.sample_due}}&nbsp;/&nbsp;{{counter.active}}
+                    </label>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Samples in progress
+                </div>
+            </div>
+            <div class="panel-body" style="height:310px;">
+                <div style="margin-top:70px"
+                     data-ng-show="counter.sample_received < 0 || counter.active < 0"
+                     spinner-on="counter.sample_received < 0 || counter.active < 0"
+                     us-spinner="{
+                                      radius: 30,
+                                      lines:13,
+                                      length: 35,
+                                      width: 8,
+                                      scale: 1,
+                                      speed: 1.5,
+                                      opacity:0.1,
+                                      corners: 1,
+                                      color:'#000',
+                                      position: 'relative',
+                                      trail: 60,
+                                      shadow: true,
+                                    }">
+
+                </div>
+                <a ui-sref="analysis_requests({review_state: 'sample_received'})">
+                    <div id="divSampleReceived" ng-show="counter.sample_received >= 0 && counter.active > 0"
+                         style="width: 80%; height: 80%; float:right; box-sizing: border-box; background:#FFFFFF;">
+
+                    </div>
+
+
+                    <label class="btn btn-success btn-lg"
+                           ng-show="counter.sample_received >= 0 && counter.active > 0"
+                           style="margin-bottom:10px;margin-left:10px;">
+                        {{counter.sample_received}}&nbsp;/&nbsp;{{counter.active}}
+                    </label>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Published
+                </div>
+            </div>
+            <div class="panel-body" style="height:310px;">
+                <div style="margin-top:70px"
+                     ng-show="counter.published < 0 || counter.active < 0"
+                     spinner-on="counter.published < 0 || counter.active < 0"
+                     us-spinner="{
+                                      radius: 30,
+                                      lines:13,
+                                      length: 35,
+                                      width: 8,
+                                      scale: 1,
+                                      speed: 1.5,
+                                      opacity:0.1,
+                                      corners: 1,
+                                      color:'#000',
+                                      position: 'relative',
+                                      trail: 60,
+                                      shadow: true,
+                                    }">
+
+                </div>
+                <a ui-sref="analysis_requests({review_state: 'published'})">
+                    <div id="divPublished" ng-show="counter.published >= 0 && counter.active > 0"
+                         style="width: 80%; height: 80%; float:right; box-sizing: border-box; background:#FFFFFF;"></div>
+                    <label class="btn btn-success btn-lg"
+                           ng-show="counter.published >= 0 && counter.active > 0"
+                           style="margin-bottom:10px;margin-left:10px;">
+                        {{counter.published}}&nbsp;/&nbsp;{{counter.active}}
+                    </label>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

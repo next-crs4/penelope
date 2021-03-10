@@ -1,0 +1,219 @@
+<div class="panel panel-primary">
+  <div class="panel-body">
+      <div class="col-sm-12 controls" >
+            <div class="col-sm-4 controls" >
+                <table class="table table-striped">
+                    <tr>
+                        <td>Cost Center:</td>
+                        <td>{{cost_center.title}}</td>
+                    </tr>
+                    <tr>
+                        <td>ID:</td>
+                        <td>{{cost_center.order_number}}</td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td>{{cost_center.description}}</td>
+                    </tr>
+                    <tr>
+                        <td>Amount:</td>
+                        <td>{{cost_center.rights}}</td>
+                    </tr>
+                    <tr>
+                        <td>Reagents's Cost:</td>
+                        <td>{{cost_center.location}}</td>
+                    </tr>
+                    <tr>
+                        <td>State:</td>
+                        <td>{{ctrl.format_review_state(cost_center.review_state)}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-4 controls" >
+                <table class="table table-striped">
+                    <tr>
+                        <td>Creation Date:</td>
+                        <td>{{ctrl.format_date(cost_center.creation_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Order Date:</td>
+                        <td>{{ctrl.format_date(cost_center.order_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Expiration Date:</td>
+                        <td>{{ctrl.format_date(cost_center.expiration_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Dispatched Date:</td>
+                        <td>{{ctrl.format_date(cost_center.dispatched_date)}}</td>
+                    </tr>
+                    <tr ng-show="clients">
+                        <td>Client:</td>
+                        <td ng-if="clients">
+                            <a class="pull-left" ui-sref="client({client_id: cost_center.client_id})" style="text-decoration: none;">
+                                {{ ctrl.get_client_name(cost_center.client_id, clients) }}
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--<div class="col-sm-4 controls" ng-if="batches.length > 0">-->
+
+                            <!--<button type="button" class="btn btn-primary pull-right" ng-if="stats.amount < 0"-->
+                                    <!--data-ng-click="ctrl.get_partial_amount()">-->
+                                <!--<span class="glyphicon glyphicon-briefcase"></span>&nbsp;Calculate Partial Amount-->
+                            <!--</button>-->
+
+
+
+                                <!--<div style="margin-top:120px"-->
+                                     <!--ng-if="stats.start == true"-->
+                                     <!--spinner-on="stats.start == true"-->
+                                     <!--us-spinner="{-->
+                                                  <!--radius: 30,-->
+                                                  <!--lines:13,-->
+                                                  <!--length: 35,-->
+                                                  <!--width: 8,-->
+                                                  <!--scale: 1,-->
+                                                  <!--speed: 1.5,-->
+                                                  <!--opacity:0.1,-->
+                                                  <!--corners: 1,-->
+                                                  <!--color:'#000',-->
+                                                  <!--position: 'relative',-->
+                                                  <!--trail: 60,-->
+                                                  <!--shadow: true,-->
+                                                <!--}">-->
+                                <!--</div>-->
+
+                                <!--<div id="divAmount"-->
+                                    <!--style="float:right; box-sizing: border-box; background:#FFFFFF;">-->
+                                <!--</div>-->
+                                <!--<label class="btn btn-danger btn-lg pull-right" style="margin-top:-100px;"-->
+                                   <!--data-ng-if="stats.amount >= 0"-->
+                                   <!--style="margin-bottom:10px;margin-left:10px;">-->
+                                <!--{{stats.amount}}&nbsp; <i class="glyphicon glyphicon-euro"></i>&nbsp;/&nbsp;{{cost_center.rights}}&nbsp; <i class="glyphicon glyphicon-euro"></i>-->
+                                <!--</label>-->
+            <!--</div>-->
+        </div>
+      <div class="col-sm-12" style="margin-top:10px;">
+                    <table class="table table-striped table-hover table-bordered table-responsive">
+                        <thead>
+                        <tr class="alert alert-info">
+                            <th ng-click="sort('title')">Name
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='title'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('rights')">Order Number
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='description'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('location')">Storage Location
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='description'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('expiration_date')">Expiration
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='date'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('effective_date')">Received date
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='date'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('review_state')">State
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='review_state'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('price')">Price
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='price'"
+                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
+                            <th>To use</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-if="reagents.length > 0">
+                        <tr data-ng-repeat="row in reagents | orderBy:sortKey:reverse|filter:search"
+                            ng-class="{'alert alert-danger': ctrl.check_expiration(row.expiration_date)<=0, 'alert alert-warning': ctrl.check_expiration(row.expiration_date)<=30}">
+                            <td>{{ctrl.get_labproduct_title(row.title)}}</td>
+                            <td>{{ctrl.get_order_number(row.rights)}}</td>
+                            <td>{{ctrl.get_storage_location(row.location)}}</td>
+                            <td>{{ctrl.format_date(row.expiration_date)}}</td>
+                            <td>{{ctrl.format_date(row.effective_date)}}</td>
+                            <td>{{ctrl.format_review_state(row.review_state)}}</td>
+                            <td>{{row.price}}</td>
+                            <td>{{row.to_use}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+      </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-body">
+
+        <form class="form-inline">
+            <div class="col-sm-12 controls" >
+
+                <label title="published" ng-if="batches.length > 0" class="btn btn-success  pull-right" style="margin-left:10px;">{{batches.length}}</label>
+                <input type="text" ng-model="search" ng-if="batches.length > 0" class="form-control pull-right" placeholder="Search...">
+            </div>
+        </form>
+         <div class="col-sm-12 controls" style="margin-top:10px;">
+            <table class="table table-striped table-hover table-bordered table-responsive" >
+                <thead>
+                <tr class="alert alert-success">
+                    <th ng-click="sort('id')">BatchID
+                       <span class="glyphicon sort-icon" ng-show="sortKey=='id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('title')">Title
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('description')">Description
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('date')">Date
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th>Samples</th>
+                    <th ng-click="sort('review_state')">State
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='review_state'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody ng-if="batches.length > 0">
+                    <tr data-ng-repeat="row in batches">
+                        <td>
+                            <a class="pull-left" ui-sref="batch({batch_id: row.id})" style="text-decoration: none;">
+                                <span>{{row.id}}</span>
+                            </a>
+
+                        </td>
+                        <td>
+                            <a class="pull-left" ui-sref="batch({batch_id: row.id})" style="text-decoration: none;">
+                                <span>{{row.title}}</span>
+                            </a>
+
+                        </td>
+                        <td><a class="pull-left" ui-sref="batch({batch_id: row.id})" style="text-decoration: none;"><span>{{row.description}}</span></a></td>
+                        <td>{{ctrl.format_date(row.creation_date)}}</td>
+                        <td>{{samples[row.id]}}
+                            <div  style="margin-top:10px"
+                                  data-ng-if="!samples[row.id]"
+                                  spinner-on="!samples[row.id]"
+                                  us-spinner="{radius:20,
+                                  lines:10,
+                                  length:15,
+                                  width: 20,
+                                  scale:0.20,
+                                  speed: 1.5,
+                                  opacity:0.10,
+                                  corners: 1,
+                                  position: 'relative'}"></div></td>
+                        <td>{{ctrl.format_review_state(row.review_state)}}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+             </div>
+        </div>
+    </div>
+

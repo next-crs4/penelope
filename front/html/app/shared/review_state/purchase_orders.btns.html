@@ -1,0 +1,68 @@
+<button type="button" class="btn btn-success" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('load')"
+        data-ng-click="ctrl.change_review_state('load')"
+        ng-disabled="checked_list.length === 0">
+    <span class="glyphicon glyphicon-cloud-upload">
+    </span> Load
+</button>
+<button type="button" class="btn btn-danger " aria-hidden="true"
+        ng-disabled="checked_list.length == 0"
+        data-ng-if="ctrl.check_transitions('unload')"
+        data-ng-click="ctrl.change_review_state('unload')">
+    <span class="glyphicon glyphicon-cloud-download">
+    </span> UnLoad
+</button>
+<button type="button" class="btn btn-warning" aria-hidden="true"
+        ng-show="ctrl.check_transitions('unload')"
+        data-ng-disabled="checked_list.length == 0"
+        data-nq-collapse="" data-target-id="#collapseEditReagentForm" data-collapsed="true">
+    <span class="glyphicon glyphicon-edit">
+    </span>&nbsp;Edit
+</button>
+<div id="collapseEditReagentForm"  class="panel panel-default" style="margin-top:10px;"  ng-show="ctrl.check_transitions('unload')">
+    <div class="panel-heading">
+        <div class="panel-title">Edit Reagent</div>
+    </div>
+    <div class="panel-body">
+        <form name="editForm" class="form">
+            <div class="col-sm-12 controls">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>&nbsp;Received
+                            </div>
+                            <input type="text" ng-model="edit_reagents_params.received_date" class="form-control"
+                                   data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                                   data-nq-placeholder="Received Date..." vname="received_date">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>&nbsp;Expiration
+                            </div>
+                            <input type="text" ng-model="edit_reagents_params.expiration_date" class="form-control"
+                                   data-nq-datepicker="" data-qo-format="YYYY-MM-DD" data-qo-mode='date'
+                                   placeholder="Expiration Date...">
+                    </div>
+                </div>
+                <div class="input-inline col-sm-4">
+                        <select data-nq-select="" data-min-required="1"
+                                data-qo-placeholder="Storage Locations.."
+                                data-ng-model="edit_reagents_params.storage_location"
+                                data-ng-options="s.title for s in storage_locations">
+                        </select>
+
+                </div>
+            </div>
+            <div class="col-sm-12 controls" style="margin-top:10px;" >
+                <div class="col-sm-6 input-inline pull-right">
+                    <button type="button" class="btn btn-success pull-right"
+                            data-ng-click="ctrl.edit_reagents(edit_reagents_params,checked_list)">
+                        <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="row" xmlns="http://www.w3.org/1999/html">
+    <div class="pull-right" style="padding-right:20px;">
+        <span class="fic glyphicon glyphicon-blackboard" ></span>
+        <span style="margin-left:5px;">
+            <ng-pluralize count="ngCart.getTotalItems()" when="{1: 'AR', 'other':'ARs'}"></ng-pluralize>
+        </span>
+        <span style="margin-left:5px; margin-top:-5px;"
+              class="btn-success badge">{{ ngCart.getTotalItems() }}</span>
+	</div>
+</div>

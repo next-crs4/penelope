@@ -1,0 +1,20 @@
+<div ng-controller="DashRunsCtrl as ctrl" style="margin-top:10px">
+        <div data-nq-tabset="" data-tabset-model="demoTabset" data-effect="slide-bottom">
+            <div data-nq-tab="" data-heading="Runs">
+                <div ng-include="'app/components/dashboard/runs/runs.view.html'"></div>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+            <div data-nq-tab="" data-heading="Sequencers">
+                <div ng-include="'app/components/dashboard/runs/sequencers.view.html'"></div>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+            <div data-nq-tab="" data-heading="Rapid Mode">
+                <div ng-include="'app/components/dashboard/runs/modes.view.html'"></div>
+                <div ng-bind-html="tabParagraph">
+                </div>
+            </div>
+
+        </div>
+    </div>

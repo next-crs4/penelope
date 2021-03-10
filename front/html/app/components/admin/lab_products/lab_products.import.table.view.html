@@ -1,0 +1,36 @@
+<div style="margin-bottom: 5px">
+    <form class="form-inline">
+        <div class="col-sm-12 controls" >
+            <input type="text" ng-model="search" class="form-control pull-right" placeholder="Search...">
+        </div>
+    </form>
+    <div class="col-sm-12 controls" style="margin-top:10px;">
+    <table class="table table-striped table-hover table-bordered table-responsive" >
+        <thead>
+            <tr class="alert alert-success">
+                <th>Catalog ID</th>
+                <th>Name</th>
+                <th>Descrition</th>
+                <th>Volume</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr dir-paginate="row in import_params.inventory | orderBy:sortKey:reverse|filter:search|itemsPerPage:250">
+                <td>{{row.id}}</td>
+                <td>{{row.name}}</td>
+                <td>{{row.description}}</td>
+                <td>{{row.volume}}</td>
+                <td>{{row.price}}</td>
+            </tr>
+        </tbody>
+    </table>
+        <dir-pagination-controls
+                max-size="10"
+                direction-links="true"
+                boundary-links="true"
+                class="pull-right"
+                style="margin-top: -25px">
+        </dir-pagination-controls>
+    </div>
+</div>

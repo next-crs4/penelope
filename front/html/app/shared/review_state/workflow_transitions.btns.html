@@ -1,0 +1,85 @@
+<button type="button" class="btn btn-primary" aria-hidden="true"
+        data-ng-show="ctrl.check_transitions('assign', workflow_transitions)"
+        data-ng-disabled="checked_list.length == 0"
+        data-nq-collapse="" data-target-id="#collapseAssignForm" data-collapsed="true">
+    <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Assign
+</button>
+<button type="button" class="btn btn-primary" aria-hidden="true"
+        data-ng-show="ctrl.check_transitions('submit', workflow_transitions)"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_workflow_review_state('submit', checked_list, workflow_params.analyses)">
+    <span class="glyphicon glyphicon-new-window"></span>&nbsp;Submit
+</button>
+<!--data-ng-click="ctrl.change_workflow_review_state('submit')"-->
+<button type="button" class="btn btn-success" aria-hidden="false"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-show="ctrl.check_transitions('verify', workflow_transitions)"
+        data-ng-click="ctrl.change_workflow_review_state('verify', checked_list, workflow_params.analyses)">
+    <span class="glyphicon glyphicon-check">
+    </span>&nbsp;Verify
+</button>
+<button type="button" class="btn btn-success" aria-hidden="true"
+        data-ng-show="ctrl.check_transitions('publish', workflow_transitions)"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_workflow_review_state('publish', checked_list, workflow_params.analyses)">
+    <span class="glyphicon glyphicon-globe">
+    </span>&nbsp;Publish
+</button>
+<button type="button" class="btn btn-success" aria-hidden="true"
+        data-ng-show="ctrl.check_transitions('republish', workflow_transitions)"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_workflow_review_state('republish', checked_list, workflow_params.analyses)">
+    <span class="glyphicon glyphicon-globe">
+    </span>&nbsp;Republish
+</button>
+<div id="collapseAssignForm"  class="panel panel-default" style="margin-top:10px;">
+    <div class="panel-heading">
+        <div class="panel-title">Assign to a worksheet</div>
+    </div>
+    <div class="panel-body">
+        <div class="col-sm-12 controls">
+            <div class="col-sm-3">
+                <input type="checkbox" ng-model="workflow_params.switchWorksheet" data-nq-switch-button=""
+                       data-theme="warning,stripped,rounded"
+                       data-label-text="Worksheet" data-false-label="Create new" data-true-label="Add to">
+            </div>
+            <div class="input-inline col-sm-3" data-ng-if="workflow_params.switchWorksheet">
+                <select data-nq-select="" data-qo-placeholder="Worksheets..."
+                        data-ng-options="w.title for w in worksheets"
+                        data-ng-model="workflow_params.worksheet">
+                </select>
+            </div>
+            <div class="input-inline col-sm-3" data-ng-if="!workflow_params.switchWorksheet">
+                            <input type="text" data-ng-required="true"
+                                   title="batch"
+                                   class="form-control"
+                                   ng-model="workflow_params.worksheet_title"
+                                   placeholder="Worksheet..."/>
+            </div>
+            <div class="input-inline col-sm-6" data-ng-if="!workflow_params.switchWorksheet">
+                            <input type="text" class="form-control" data-ng-required="true"
+                                   ng-model="workflow_params.worksheet_description" data-name="description"
+                                   placeholder="Description...">
+            </div>
+        </div>
+        <div class="col-sm-12 controls">
+
+            <div class="input-inline col-sm-6" style="margin-top:10px">
+                <select data-nq-select="" data-qo-placeholder="Analyst..."
+                        data-ng-options="u.fullname for u in analysts"
+                        data-ng-init="workflow_params.analyst = _.findWhere(analysts, {'fullname': currentUser.fullname})"
+                        data-ng-model="workflow_params.analyst">
+                </select>
+            </div>
+        </div>
+         <div class="col-sm-12 controls">
+            <div class="col-sm-12 controls pull-right" style="margin-top:10px;">
+                <button type="button" class="btn btn-primary" aria-hidden="true"
+                        data-ng-show="ctrl.check_transitions('assign', workflow_transitions)"
+                        data-ng-click="ctrl.change_workflow_review_state('assign', checked_list, workflow_params.analyses)">
+                    <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Assign
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="panel panel-primary">
+  <div class="panel-body">
+      <div class="col-sm-12 controls" >
+            <div class="col-sm-8 controls" >
+                <table class="table table-striped">
+                    <tr>
+                        <td>Lab&nbsp;Product:</td>
+                        <td>{{lab_product.title}}</td>
+                    </tr>
+                    <tr>
+                        <td>Catalog&nbsp;ID:</td>
+                        <td>{{lab_product.rights}}</td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td class="small">{{lab_product.description}}</td>
+                    </tr>
+                    <tr>
+                        <td>Manufacturer:</td>
+                        <td>{{ctrl.get_manufacturer(lab_product.location)}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-4 controls" >
+                <table class="table table-striped">
+                    <tr>
+                        <td>Creation&nbsp;Date:</td>
+                        <td>{{ctrl.format_date(lab_product.creation_date)}}</td>
+                    </tr>
+                    <tr>
+                        <td>State:</td>
+                        <td>{{ctrl.format_review_state(lab_product.review_state)}}</td>
+                    </tr>
+                     <tr>
+                        <td>Volume:</td>
+                        <td>{{lab_product.volume}}</td>
+                    </tr>
+                    <tr>
+                        <td>Price:</td>
+                        <td>{{lab_product.price}}</td>
+                    </tr>
+                    <tr>
+                        <td>Units:</td>
+                        <td>{{lab_product.unit}}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+      </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-body">
+
+        <form class="form-inline">
+                <div class="col-sm-12 controls" >
+                    <div class="btn-group  btn-group-reset" ng-model="buttons.radio" ng-init="buttons.radio = 'loaded'" data-nq-radio-group="">
+                        <label title="Middle Button" class="btn btn-primary"><input type="radio" value="loaded" data-ng-click="getLabProducts(state.labproduct_id, 'loaded')">Loaded</label>
+                        <label title="Right Button" class="btn btn-primary"><input type="radio" value="unloaded" data-ng-click="getLabProducts(state.labproduct_id, 'unloaded')">Unloaded</label>
+                        <label title="Left Button" class="btn btn-warning"><input type="radio" value="due" data-ng-click="getLabProducts(state.labproduct_id, 'due')">Due</label>
+                    </div>
+                    <label title="published" ng-if="pagination.total > 0" class="btn btn-success  pull-right" style="margin-left:10px;">{{pagination.last}}/{{pagination.total}}</label>
+                    <label title="published" ng-if="pagination.total == 0" class="btn btn-success  pull-right" style="margin-left:10px;">{{pagination.total}}</label>
+                    <input type="text" ng-model="search" ng-if="pagination.total > 0" class="form-control pull-right" placeholder="Search...">
+                </div>
+        </form>
+         <div class="col-sm-12 controls" style="margin-top:10px;">
+            <table class="table table-striped table-hover table-bordered table-responsive" >
+                <thead>
+                <tr class="alert alert-success">
+                    <th>
+                        <div style="padding-left:10px;">
+                            <input type="checkbox"  value=""
+                                   data-ng-checked="checked_list.length == lab_products.length  && checked_list.length > 0"
+                                   data-ng-click="ctrl.toggle_all()">
+                        </div>
+                    </th>
+                    <th ng-click="sort('rights')">Order Number
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('location')">Storage Location
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('expiration_date')">Expiration
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th>Use
+                    </th>
+                    <th ng-click="sort('creation_date')">Created
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('date')">Updated
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('review_state')">State
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='review_state'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th><span class="fic glyphicon glyphicon-wrench" ></span></th>
+                </tr>
+                </thead>
+                <tbody ng-if="lab_products.length > 0">
+                    <tr dir-paginate="row in lab_products | orderBy:sortKey:reverse|filter:search|itemsPerPage:pagination.page_size"
+                        total-items="pagination.total" current-page="pagination.current"
+                        ng-class="{'alert alert-danger': ctrl.check_expiration(row.expiration_date)<=0, 'alert alert-warning': ctrl.check_expiration(row.expiration_date)<=30}">
+                        <td>
+                            <div style="padding-left:10px;">
+                                <input type="checkbox"  value="{{row.id}}"
+                                       data-ng-checked="checked_list.indexOf(row.id) > -1"
+                                       data-ng-click="ctrl.toggle(row.id)">
+                            </div>
+                        </td>
+                        <td> <a class="pull-left" ui-sref="purchase_order({purchaseorder_id: row.rights})" style="text-decoration: none;">{{ctrl.get_order_number(row.rights)}}</a></td>
+                        <td>{{ctrl.get_storage_location(row.location)}}</td>
+                        <td>{{ctrl.format_date(row.expiration_date)}}</td>
+                        <td>{{ctrl.get_consumption(row.id)}}</td>
+                        <td>{{ctrl.format_date(row.creation_date)}}</td>
+                        <td>{{ctrl.format_date(row.date)}}</td>
+                        <td>{{ctrl.format_review_state(row.review_state)}}</td>
+                        <td><ng-include src="'app/shared/review_state/lab_products.btns.mini.html'"></ng-include></td>
+                    </tr>
+                    </tbody>
+                </table>
+                     <dir-pagination-controls
+                                max-size="10"
+                                direction-links="true"
+                                boundary-links="true"
+                                class="pull-right"
+                                on-page-change="ctrl.changePage(newPageNumber, oldPageNumber)"
+                                style="margin-top: -25px">
+                        </dir-pagination-controls>
+
+                    </div>
+                    <div class="col-sm-12 controls" style="margin-top:10px;" ng-if="lab_products.length > 0">
+                        <ng-include src="'app/shared/review_state/lab_products.btns.html'"></ng-include>
+                    </div>
+             </div>
+        </div>
+    </div>

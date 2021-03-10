@@ -1,0 +1,20 @@
+<div style="padding-top:10px;" data-ng-app="CostCentersModule" data-ng-controller="CostCenterDetailsCtrl as ctrl">
+    <div>
+        <div data-nq-tabset="" data-tabset-model="demoTabset">
+            <div data-nq-tab="" data-heading="{{state.costcenter_id}}">
+                <ng-include src="'app/components/admin/cost_centers/cost_center.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+
+            </div>
+            <div data-nq-tab="" data-heading="Edit">
+                <ng-include src="'app/components/admin/cost_centers/cost_center.edit.view.html'"></ng-include>
+                <div ng-bind-html="tabParagraph">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

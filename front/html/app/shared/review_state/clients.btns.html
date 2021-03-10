@@ -1,0 +1,14 @@
+<button type="button" class="btn btn-default" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('activate')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('activate')">
+    <span class="glyphicon glyphicon-folder-open">
+    </span>&nbsp;Activate
+</button>
+<button type="button" class="btn btn-danger" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('deactivate')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('deactivate')">
+    <span class="glyphicon glyphicon-folder-close">
+    </span>&nbsp;Deactivate
+</button>

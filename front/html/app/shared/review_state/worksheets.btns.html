@@ -1,0 +1,53 @@
+<button type="button" class="btn btn-success" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('receive')"
+        data-ng-click="ctrl.change_review_state('receive')">
+    <span class="glyphicon glyphicon-download-alt">
+    </span>&nbsp;Receive&nbsp;sample
+</button>
+<button type="button" class="btn btn-default" aria-hidden="true"
+        ng-if="ctrl.check_transitions('open')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('close')">
+    <span class="glyphicon glyphicon-folder-close">
+    </span>&nbsp;Close
+</button>
+<button type="button" class="btn btn-default" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('closed')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('open')">
+    <span class="glyphicon glyphicon-folder-open">
+    </span>&nbsp;Open
+</button>
+<button type="button" class="btn btn-warning" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('cancelled')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('reinstate')">
+    <span class="glyphicon glyphicon-retweet">
+    </span>&nbsp;Reinstate
+</button>
+<button type="button" class="btn btn-danger" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('open') || ctrl.check_transitions('closed')"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_review_state('cancel')">
+    <span class="glyphicon glyphicon-trash">
+    </span>&nbsp;Cancel
+</button>
+<button type="button" class="btn btn-primary" aria-hidden="true"
+        data-ng-show="ctrl.check_transitions('submit', workflow_transitions)"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_workflow_review_state('submit', checked_list)">
+    <span class="glyphicon glyphicon-new-window"></span>&nbsp;Submit
+</button>
+<button type="button" class="btn btn-success" aria-hidden="false"
+        data-ng-show="ctrl.check_transitions('verify', workflow_transitions)"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_workflow_review_state('verify', checked_list)">
+    <span class="glyphicon glyphicon-check">
+    </span>&nbsp;Verify
+</button>
+<button type="button" class="btn btn-success" aria-hidden="true"
+        data-ng-show="ctrl.check_transitions('publish', workflow_transitions)"
+        data-ng-disabled="checked_list.length == 0"
+        data-ng-click="ctrl.change_workflow_review_state('publish', checked_list)">
+    <span class="glyphicon glyphicon-globe"></span>&nbsp;Publish
+</button>

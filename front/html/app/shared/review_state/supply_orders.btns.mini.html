@@ -1,0 +1,24 @@
+<button type="button" class="btn btn-default btn-xs" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('activate', row.transitions)">
+    <span class="glyphicon glyphicon-folder-open"
+          data-qo-theme="info" data-qo-placement="right"
+          data-nq-tooltip="" data-qs-title="Activate"
+          data-ng-click="ctrl.change_review_state('activate', row.id)">
+    </span>
+</button>
+<button type="button" class="btn btn-danger btn-xs" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('deactivate', row.transitions)">
+    <span class="glyphicon glyphicon-folder-close"
+          data-qo-theme="info" data-qo-placement="right"
+          data-nq-tooltip="" data-qs-title="Deactivate"
+          data-ng-click="ctrl.change_review_state('deactivate', row.id)">
+    </span>
+</button>
+<button type="button" class="btn btn-success btn-xs" aria-hidden="true"
+        data-ng-if="ctrl.check_transitions('dispatch', row.transitions)">
+    <span class="glyphicon glyphicon-euro"
+          data-qo-theme="info" data-qo-placement="right"
+          data-nq-tooltip="" data-qs-title="Dispatch"
+          data-ng-click="ctrl.change_review_state('dispatch', row.id)">
+    </span>
+</button>

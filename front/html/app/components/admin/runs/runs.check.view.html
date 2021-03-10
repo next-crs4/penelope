@@ -1,0 +1,61 @@
+<div data-ng-app="RunsModule" ng-controller="CheckCtrl as ctrl">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <form class="form-inline">
+                <div class="col-sm-12 controls">
+                    <label title="published" class="btn btn-success  pull-right" style="margin-left:10px;">{{checks.length}}</label>
+                    <input type="text" ng-model="search" ng-show="checks.length > 0" class="form-control pull-right" placeholder="Search...">
+                </div>
+            </form>
+            <div class="col-sm-12 controls" style="margin-top:10px;">
+                <table class="table table-striped table-hover table-bordered table-responsive" >
+                    <thead>
+                    <tr class="alert alert-success">
+
+                        <th ng-click="sort('run')">Run
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='run'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('ready')">Ready
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='ready'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('status')">Status
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='status'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('ownership')">Ownership
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='ownership'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('samplesheet')">Samplesheet
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='samplesheet'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('barcodes')">Barcodes
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='barcodes'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('metadata')">Metadata
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='metadata'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody ng-if="checks.length > 0">
+                    <tr data-ng-repeat="row in checks track by $index">
+                        <td>
+                            <a class="pull-left" ui-sref="run({rd_label: row.run})" style="text-decoration: none;">
+                                <span>{{row.run}}</span>
+                            </a>
+                        </td>
+                        <td data-ng-class="{'alert alert-success': row.ready=='True', 'alert alert-danger': row.ready=='False'}">
+                            <span class="fic glyphicon glyphicon-ok style="margin-left:10px;" ng-if="row.ready=='True'"></span>
+                            <span class="fic glyphicon glyphicon-remove" style="margin-left:10px;" ng-if="row.ready=='False'"></span>
+                        </td>
+                        <td>{{row.status}}</td>
+                        <td>{{row.ownership}}</td>
+                        <td>{{row.samplesheet}}</td>
+                        <td>{{row.barcodes}}</td>
+                        <td>{{row.metadata}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

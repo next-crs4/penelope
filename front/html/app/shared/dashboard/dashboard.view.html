@@ -1,0 +1,198 @@
+<div style="width:100%; overflow:hidden; margin-top:-5px;"
+     ng-init="asideSettings={enlargeHover:true, offCanvas:'mobile'}"
+     ng-if="$state.current.name!=='login'"
+     data-ng-app="DashboardModule" data-ng-controller="DashboardCtrl as ctrl">
+    <div id="leftMenuAside" data-nq-aside="myLeftAside" class="aside"
+         data-collapsible="true"
+         data-top-offset="50px"
+         data-pinnable="true"
+         data-opened="true"
+         data-collapsed="true"
+         data-enlarge-hover="{{asideSettings.enlargeHover}}"
+         data-ng-swipe-left="$aside.toggleCollapse(true);"
+         data-ng-swipe-right="$aside.toggleCollapse(false);">
+        <div class="aside-header btn-success no-border">
+            <div class="aside-buttons">
+                <span ng-show="myLeftAside.$collapsed" ng-click="$aside.toggleCollapse()">
+                    <i class="glyphicon glyphicon-arrow-right"></i>
+                </span>
+                <span ng-hide="myLeftAside.$collapsed" ng-click="$aside.toggleCollapse()">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                </span>
+                <span ng-hide="myLeftAside.$collapsed"
+                      ng-click="asideSettings.enlargeHover = !$aside.$pinned; $aside.togglePin();"
+                      class="titip-right" data-title="Toggle Pin">
+                    <i class="glyphicon glyphicon-pushpin"></i>
+                </span>
+            </div>
+
+            <span ng-hide="$aside.$collapsed" class="aside-title">Dashboard</span>
+        </div>
+        <div class="aside-body bordered" style="overflow-y:auto;">
+
+            <div
+                 data-nq-scroll="" data-qo-hide-rail="true"
+                 data-qo-vertical-placement="left"  ng-hide="$aside.$collapsed">
+                <div class="list-group-container" data-ng-if="counter.sample_due > 0">
+                    <div class="list-group-heading" style="padding:10px 10px 10px 10px;" data-ng-if="counter.sample_due != 0">
+                        <h4>
+                            <span class="text">Sample Due</span>
+                            <a ui-sref="analysis_requests({review_state: 'sample_due'})">
+                                <span class="btn-default active badge pull-right"
+                                      data-ng-if="counter.sample_due > 0">{{counter.sample_due}}</span>
+                                <span class="btn-default active badge pull-right"
+                                      data-ng-if="counter.sample_due < 0"><
+                                    <div style="margin-top:7px"
+                                  spinner-on="counter.sample_due < 0"
+                                  us-spinner="{radius:10,
+                                  lines:7,
+                                  length:10,
+                                  width: 15,
+                                  scale:0.20,
+                                  speed: 1.5,
+                                  opacity:0.1,
+                                  corners: 1,
+                                  color:'white',
+                                  position: 'relative'}"></div>&nbsp;&nbsp;</span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="list-group-container">
+                    <div class="list-group-heading" style="padding:10px 10px 10px 10px;" data-ng-if="counter.sample_received != 0">
+                        <h4>
+                            <span class="text">Sample Received</span>
+                            <a ui-sref="analysis_requests({review_state: 'sample_received'})">
+                                <span class="btn-warning badge pull-right"
+                                      data-ng-if="counter.sample_received > 0">
+                                    {{counter.sample_received}}</span>
+                                 <span class="btn-warning badge pull-right"
+                                      data-ng-if="counter.sample_received < 0">
+                                     <div style="margin-top:7px"
+                                  spinner-on="counter.sample_received < 0"
+                                  us-spinner="{radius:10,
+                                  lines:7,
+                                  length:10,
+                                  width: 15,
+                                  scale:0.20,
+                                  speed: 1.5,
+                                  opacity:0.1,
+                                  corners: 1,
+                                  color:'white',
+                                  position: 'relative'}"></div>&nbsp;&nbsp;</span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="list-group-container">
+                    <div class="list-group-heading" style="padding:10px 10px 10px 10px;" data-ng-if="counter.assigned != 0">
+                        <h4>
+                            <span class="text">Assigned</span>
+                            <a ui-sref="worksheets">
+                                <span class="btn-danger badge pull-right"
+                                      data-ng-if="counter.assigned > 0">{{counter.assigned}}</span>
+                                <span class="btn-danger badge pull-right"
+                                      data-ng-if="counter.assigned < 0">
+                                    <div style="margin-top:7px"
+                                  spinner-on="counter.assigned < 0"
+                                  us-spinner="{radius:10,
+                                  lines:7,
+                                  length:10,
+                                  width: 15,
+                                  scale:0.20,
+                                  speed: 1.5,
+                                  opacity:0.1,
+                                  corners: 1,
+                                  color:'white',
+                                  position: 'relative'}"></div>&nbsp;&nbsp;</span>
+                            </a>
+
+                        </h4>
+                    </div>
+                </div>
+                <div class="list-group-container">
+                    <div class="list-group-heading" style="padding:10px 10px 10px 10px;" data-ng-if="counter.to_be_verified > 0">
+                        <h4>
+                            <span class="text">To be Verified</span>
+                            <a ui-sref="analysis_requests({review_state: 'to_be_verified'})">
+                                <span class="btn-info badge pull-right"
+                                      data-ng-if="counter.to_be_verified > 0">{{counter.to_be_verified}}</span>
+                                <span class="btn-warning badge pull-right"
+                                      data-ng-if="counter.to_be_verified < 0">
+                                    <div style="margin-top:7px"
+                                  spinner-on="counter.to_be_verified < 0"
+                                  us-spinner="{radius:10,
+                                  lines:7,
+                                  length:10,
+                                  width: 15,
+                                  scale:0.20,
+                                  speed: 1.5,
+                                  opacity:0.1,
+                                  corners: 1,
+                                  color:'white',
+                                  position: 'relative'}"></div>&nbsp;&nbsp;</span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="list-group-container">
+                    <div class="list-group-heading" style="padding:10px 10px 10px 10px;" data-ng-if="counter.verified != 0">
+                        <h4>
+                            <span class="text">To be Published</span>
+                            <a ui-sref="analysis_requests({review_state: 'verified'})">
+                                <span class="btn-primary badge pull-right"
+                                      data-ng-if="counter.verified > 0">{{counter.verified}}</span>
+                                <span class="btn-primary badge pull-right"
+                                      data-ng-if="counter.verified < 0">
+                                <div style="margin-top:7px"
+                                  spinner-on="counter.verified < 0"
+                                  us-spinner="{radius:10,
+                                  lines:7,
+                                  length:10,
+                                  width: 15,
+                                  scale:0.20,
+                                  speed: 1.5,
+                                  opacity:0.1,
+                                  corners: 1,
+                                  color:'white',
+                                  position: 'relative'}"></div>&nbsp;&nbsp;</span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="list-group-container">
+                    <div class="list-group-heading" style="padding:10px 10px 10px 10px;" data-ng-if="counter.published != 0">
+                        <h4>
+                            <span class="text">Published</span>
+                            <a ui-sref="analysis_requests({review_state: 'published'})">
+                                <span class="btn-success badge pull-right"
+                                      data-ng-if="counter.published > 0">{{counter.published}}</span>
+                                <span class="btn-success badge pull-right"
+                                      data-ng-if="counter.published < 0">
+                                    <div style="margin-top:7px"
+                                      spinner-on="counter.published < 0"
+                                      us-spinner="{radius:10,
+                                      lines:7,
+                                      length:10,
+                                      width: 15,
+                                      scale:0.20,
+                                      speed: 1.5,
+                                      opacity:0.1,
+                                      corners: 1,
+                                      color:'white',
+                                      position: 'relative'}"></div>&nbsp;&nbsp;</span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="aside-footer" style="padding-left:20px; height:55px;">
+            <div class="aside-buttons active" style="line-height:50px;">
+                <span ng-click="ctrl.refresh()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;</span>
+                <span><strong class="text-muted" ng-hide="$aside.$collapsed">Refresh Dashboard</strong></span>
+            </div>
+
+        </div>
+    </div>
+</div>

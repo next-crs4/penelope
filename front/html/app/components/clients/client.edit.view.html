@@ -1,0 +1,150 @@
+    <form name="addCostCenterForm" class="form">
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div class="col-sm-12 controls" style="margin-top:10px;">
+                    <div data-nq-tabset="" data-tabset-model="demoTabset" data-placement="left">
+                        <div data-nq-tab="" data-heading="Default">
+                            <div class="col-sm-12" style="margin-top:10px;">
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="client_params.name" class="form-control"
+                                           placeholder="Client Name..." data-ng-required="true" name="client_name"
+                                           required>
+                                </div>
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="client_params.id" class="form-control"
+                                           placeholder="Client ID..." data-ng-required="true" name="client_id" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-top:10px;">
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="client_params.phone" class="form-control"
+                                           data-ng-disabled="client_params.name.length==0 || client_params.id.length==0 ||
+                                            client_params.name==null || client_params.id==null"
+                                           placeholder="Phone..." name="client_phone">
+                                </div>
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="client_params.email" class="form-control"
+                                           data-ng-disabled="client_params.name.length==0 || client_params.id.length==0 ||
+                                            client_params.name==null || client_params.id==null"
+                                           placeholder="Email..." name="client_email">
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-top:10px;">&nbsp;</div>
+                            <div ng-bind-html="tabParagraph" style="margin-top:10px;">
+                            </div>
+                        </div>
+                        <div data-nq-tab="" data-heading="Address">
+                            <div class="col-sm-12" style="margin-top:10px;">
+                                <div class="input-inline col-sm-12">
+                                    <input type="text" ng-model="client_params.address.address" class="form-control"
+                                           data-ng-disabled="client_params.name.length==0 || client_params.id.length==0 ||
+                                            client_params.name==null || client_params.id==null"
+                                           placeholder="Address..." data-ng-required="true" name="address">
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-top:10px;">
+                                <div class="input-inline col-sm-2">
+                                    <input type="text" ng-model="client_params.address.zip" class="form-control"
+                                           data-ng-disabled="client_params.name.length==0 || client_params.id.length==0 ||
+                                            client_params.name==null || client_params.id==null"
+                                           placeholder="Zip..." data-ng-required="true" name="zip">
+                                </div>
+                                <div class="input-inline col-sm-5">
+                                    <input type="text" ng-model="client_params.address.city" class="form-control"
+                                           data-ng-disabled="client_params.name.length==0 || client_params.id.length==0 ||
+                                            client_params.name==null || client_params.id==null"
+                                           placeholder="City..." data-ng-required="true" name="city">
+                                </div>
+                                <div class="input-inline col-sm-5">
+                                    <input type="text" ng-model="client_params.address.country" class="form-control"
+                                           data-ng-disabled="client_params.name.length==0 || client_params.id.length==0 ||
+                                            client_params.name==null || client_params.id==null"
+                                           placeholder="Country..." data-ng-required="true" name="country">
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12" style="margin-top:10px;">&nbsp;</div>
+                            <div ng-bind-html="tabParagraph" style="margin-top:10px;">
+                            </div>
+                        </div>
+                        <div data-nq-tab="" data-heading="Contacts">
+                            <div class="col-sm-12" style="margin-top:10px;">
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="contact_params.first_name" class="form-control"
+                                           placeholder="First Name..." data-ng-required="true" name="contact_first_name"
+                                           required>
+                                </div>
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="contact_params.surname" class="form-control"
+                                           placeholder="Surname..." data-ng-required="true" name="contact_surname"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-top:10px;">
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="contact_params.phone" class="form-control"
+                                           data-ng-disabled="contact_params.first_name.length==0 || contact_params.surname.length==0 ||
+                                            contact_params.first_name==null || contact_params.surname==null"
+                                           placeholder="Phone..." name="contact_phone">
+                                </div>
+                                <div class="input-inline col-sm-6">
+                                    <input type="text" ng-model="contact_params.email_address" class="form-control"
+                                           data-ng-disabled="contact_params.first_name.length==0 || contact_params.surname.length==0 ||
+                                            contact_params.first_name==null || contact_params.surname==null"
+                                           placeholder="Email..." name="contact_email">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 controls" style="margin-top:10px;">
+                                <div class="col-sm-12 input-inline pull-right">
+                                    <button type="button" class="btn btn-primary pull-right"
+                                            data-ng-click="ctrl.confirm_contact(contact_params)"
+                                            data-ng-disabled="contact_params.first_name.length==0 || contact_params.surname.length==0 ||
+                                            contact_params.first_name==null || contact_params.surname==null">
+                                        <span class="glyphicon glyphicon-check"></span>&nbsp;Confirm
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 controls" style="margin-top:10px;">
+                                <div class="col-sm-12 input-inline pull-right" data-ng-if="client_params.contacts.length>0">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-body">
+                                            <table class="table table-striped table-hover table-bordered table-responsive"  >
+                                                <thead>
+                                                <tr class="alert alert-success">
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr data-ng-repeat="row in client_params.contacts"
+                                                    ng-class="{'warning': row.path == undefined, 'active': row.path != undefined}">
+                                                    <td>{{row.first_name}}&nbsp;{{row.surname}}</td>
+                                                    <td>{{row.email_address}}</td>
+                                                    <td>{{row.phone}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-top:10px;">&nbsp;</div>
+                            <div ng-bind-html="tabParagraph" style="margin-top:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 controls" style="margin-top:10px;">
+                    <div class="input-inline col-sm-6 pull-right">
+                        <button type="button" class="btn btn-success pull-right"
+                                data-ng-click="ctrl.edit_client(client_params)"
+                                data-ng-disabled="client_params.name.length==0 || client_params.id.length==0 ||
+                                            client_params.name==null || client_params.id==null ||
+                                            client_params.contacts.length==0 || client_params.contacts==null">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
