@@ -111,7 +111,7 @@ $ nano front/html/app/init.module.js
 $ make start
 ```
 
-4 - Point your browser to: 
+5 - Point your browser to: 
 `http://0.0.0.0:81`
 
 

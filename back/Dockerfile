@@ -12,7 +12,7 @@ RUN mkdir /config
 ADD /config/requirements.pip /config/
 
 RUN apt-get -qq update && \
-    apt-get install --no-install-recommends -y apt-utils build-essential && \
+    apt-get install --no-install-recommends -y apt-utils build-essential sshpass && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \

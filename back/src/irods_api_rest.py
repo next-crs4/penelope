@@ -8,7 +8,7 @@ import subprocess
 import json
 from tempfile import NamedTemporaryFile
 import csv
-import uuid
+import ushlex as shlex
 import ast
 from distutils.util import strtobool
 from lxml.html import parse
@@ -96,6 +96,7 @@ class IrodsApiRestService(object):
         cmd = 'get_report_folders'
         reports = self._ssh_cmd(user=params.get('user'),
                                 host=params.get('host'),
+                                password=params.get('password'),
                                 cmd=self._get_icmd(cmd=cmd, params=params))
 
         result = [dict(
@@ -134,6 +135,7 @@ class IrodsApiRestService(object):
         cmd = 'sync_batchbook'
         res = self._ssh_cmd(user=params.get('user'),
                             host=params.get('host'),
+                            password=params.get('password'),
                             cmd=self._get_icmd(cmd=cmd, params=params),
                             switch=True)
         result = list()
@@ -147,6 +149,7 @@ class IrodsApiRestService(object):
         cmd = 'check_runs'
         res = self._ssh_cmd(user=params.get('user'),
                             host=params.get('host'),
+                            password=params.get('password'),
                             cmd=self._get_icmd(cmd=cmd, params=params),
                             switch=True)
         result = list()
@@ -172,13 +175,16 @@ class IrodsApiRestService(object):
     @wrap_default
     def get_running_folders(self):
         self.logger.info("Getting Running Folders")
+        self.logger.info(request.forms)
         params = self._get_params(request.forms)
+        self.logger.info(params)
         cmd = 'get_running_folders'
         result = list()
         for this_run_folder in params.get('run_folders'):
                 params.update(dict(run_folder=this_run_folder))
                 res = self._ssh_cmd(user=params.get('user'),
                                     host=params.get('host'),
+                                    password=params.get('password'),
                                     cmd=self._get_icmd(cmd=cmd, params=params))
 
                 result.extend([dict(
@@ -277,7 +283,8 @@ class IrodsApiRestService(object):
                 data_objects = [d for d in iobj.data_objects] if delivery else [d for d in iobj.data_objects]
                 data_objects.extend([d for d in iobj.subcollections] if delivery else [d for d in iobj.subcollections])
                 return dict(success='True', error=[], result=data_objects)
-        except:
+        except Exception as e:
+            self.logger.error(str(e.message))
             ir.sess.cleanup()
             return dict(success='False', error=[], result=[])
 
@@ -295,6 +302,7 @@ class IrodsApiRestService(object):
             else:
                 res = dict(success='False', error=[], result=[])
         except Exception as e:
+            self.logger.error(str(e.message))
             ir.sess.cleanup()
             res = dict(success='False', error=self.__str(e.message), result=[])
 
@@ -323,6 +331,7 @@ class IrodsApiRestService(object):
             else:
                 res = dict(success='False', error=[], result=[])
         except Exception as e:
+            self.logger.error(str(e.message))
             ir.sess.cleanup()
             res = dict(success='False', error=self.__str(e.message), result=[])
 
@@ -339,7 +348,8 @@ class IrodsApiRestService(object):
                 res = dict(success='True', error=[], result=lines)
             else:
                 res = dict(success='False', error=[], result=[])
-        except:
+        except Exception as e:
+            self.logger.error(str(e.message))
             ir.sess.cleanup()
             res = dict(success='False', error=[], result=[])
 
@@ -354,7 +364,8 @@ class IrodsApiRestService(object):
                                        meta=(params.get('attr_name'),
                                              params.get('attr_value') if len(params.get('attr_value')) > 0 else None))
             ir.sess.cleanup()
-        except:
+        except Exception as e:
+            self.logger.error(str(e.message))
             ir.sess.cleanup()
             pass
 
@@ -374,6 +385,7 @@ class IrodsApiRestService(object):
         params.update(dict(this_run=run))
         res = self._ssh_cmd(user=params.get('user'),
                             host=params.get('host'),
+                            password=params.get('password'),
                             cmd=self._get_icmd(cmd=cmd, params=params))
 
         if len(res['result']) == 0:
@@ -381,6 +393,7 @@ class IrodsApiRestService(object):
             params.update(dict(this_run=os.path.join(run, 'raw')))
             res = self._ssh_cmd(user=params.get('user'),
                                 host=params.get('host'),
+                                password=params.get('password'),
                                 cmd=self._get_icmd(cmd=cmd, params=params))
         return _run_info_parser(res)
 
@@ -431,6 +444,7 @@ class IrodsApiRestService(object):
         params.update(dict(this_run=run))
         res = self._ssh_cmd(user=params.get('user'),
                             host=params.get('host'),
+                            password=params.get('password'),
                             cmd=self._get_icmd(cmd=cmd, params=params))
 
         if len(res['result']) == 0:
@@ -438,6 +452,7 @@ class IrodsApiRestService(object):
             params.update(dict(this_run=os.path.join(run, 'raw')))
             res = self._ssh_cmd(user=params.get('user'),
                                 host=params.get('host'),
+                                password=params.get('password'),
                                 cmd=self._get_icmd(cmd=cmd, params=params))
 
         return _run_parameters_parser(res)
@@ -507,13 +522,16 @@ class IrodsApiRestService(object):
 
         return qc_summary
 
-    def _ssh_cmd(self, user, host, cmd, switch=False):
+    def _ssh_cmd(self, user, host, password, cmd, switch=False):
         remote = "{}@{}".format(user, host)
-        ssh = subprocess.Popen(["ssh", remote, cmd],
+        self.logger.info(cmd)
+        _= shlex.split("sshpass -p " + password + " ssh -oStrictHostKeyChecking=no " + remote + " " + cmd)
+        
+
+        ssh = subprocess.Popen(args=_,
                                shell=False,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
-
         result = [line.rstrip('\n') for line in ssh.stdout.readlines()]
         error = ssh.stderr.readlines()
 
