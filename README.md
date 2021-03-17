@@ -122,7 +122,7 @@ $ make ELK_HOST=your-elk-host ELK_PORT=your-elk-port start
 
 #### Other commands
  
-Bring down the Penope app
+Bring down the Penelope app
 ```bash
 $ make stop
 ```
