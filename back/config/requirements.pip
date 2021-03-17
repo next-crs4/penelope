@@ -1,8 +1,8 @@
 python-daemon
 lockfile
-comoda==0.4.0
 bottle
 Paste
 lxml
 ushlex
 git+https://github.com/gmauro/alta.git
+comoda==0.4.0

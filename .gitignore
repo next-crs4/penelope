@@ -41,3 +41,5 @@ cover
 #Config
 #*init.cfg
 *init.module.js
+
+*.env

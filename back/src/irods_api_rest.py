@@ -175,9 +175,7 @@ class IrodsApiRestService(object):
     @wrap_default
     def get_running_folders(self):
         self.logger.info("Getting Running Folders")
-        self.logger.info(request.forms)
         params = self._get_params(request.forms)
-        self.logger.info(params)
         cmd = 'get_running_folders'
         result = list()
         for this_run_folder in params.get('run_folders'):

@@ -110,9 +110,49 @@ $ nano front/html/app/init.module.js
 ```bash
 $ make start
 ```
-
 5 - Point your browser to: 
 `http://0.0.0.0:81`
+
+
+### Logging to an [ELK Stack](https://www.elastic.co/what-is/elk-stack)
+
+```shell
+$ make ELK_HOST=your-elk-host ELK_PORT=your-elk-port start 
+```
+
+#### Other commands
+ 
+Bring down the Penope app
+```bash
+$ make stop
+```
+
+Remove Penelope app from your machine
+```bash
+$ make clean
+```
+
+Print the help message
+```bash
+$ make help
+
+===================================================================================================
+
+Penelope - a complete LIMS for NGS Labs 
+https://github.com/next-crs4/penelope
+ 
+Please use `make [options] <target>` where <target> is one of
+  start                 bring up Penelope LIMS
+  stop                  bring down Penelope LIMS
+  clean                 remove Penelope LIMS from your computer
+  
+To redirect logs on a ELK stack a, digit: 
+  make ELK_HOST=your-elk-site.com ELK_PORT=5044 start
+ 
+Docs: https://github.com/next-crs4/penelope/blob/master/README.md
+ 
+```
+  
 
 
 

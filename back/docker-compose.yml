@@ -4,6 +4,8 @@ services:
   back:
     build: .
     container_name: bk01
+    env_file:
+      - .env
     command: >
       bash -c "sh /back/script/ngs_read_service.sh start && sh /back/script/ngs_write_service.sh start"
     volumes:

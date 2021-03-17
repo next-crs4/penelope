@@ -154,7 +154,7 @@ def main(argv):
     parser = get_parser()
     args = parser.parse_args(argv)
 
-    logger = a_logger('BikaService', level='INFO')
+    logger = a_logger('BikaService', level='INFO',  host=args.log_host, port=args.log_port)
 
     bikaApi = BikaApiRestService(logger)
     irodsApi = IrodsApiRestService(logger)
