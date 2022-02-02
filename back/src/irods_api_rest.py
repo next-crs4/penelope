@@ -8,12 +8,19 @@ import subprocess
 import json
 from tempfile import NamedTemporaryFile
 import csv
-import ushlex as shlex
+import shlex
 import ast
 from distutils.util import strtobool
 from lxml.html import parse
-from alta.objectstore import build_object_store
+from libs.yrods import IrodsObjectStore
 
+
+class MyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (bytes, bytearray)):
+            return obj.decode("latin1") # <- or any other encoding of your choice
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
 
 class IrodsApiRestService(object):
     def __init__(self, logger):
@@ -53,7 +60,7 @@ class IrodsApiRestService(object):
         response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
         response.content_type = 'application/json'
         response.status = return_code
-        return json.dumps({'result': body}, encoding='latin1')
+        return json.dumps({'result': body}, cls=MyEncoder)
 
     def _get_params(self, request_data):
         for item in request_data:
@@ -100,13 +107,14 @@ class IrodsApiRestService(object):
                                 cmd=self._get_icmd(cmd=cmd, params=params))
 
         result = [dict(
-            path=str(r.path),
-            run=str(r.name),
+            path=r.path,
+            run=r.name.encode('utf-8'),
             metadata=self.__get_metadata(irods_obj=r),
-            files=[str(f.name) for f in r.data_objects],
-            report_path=os.path.join(params.get('report_host'), r.name) if r.name in reports['result'] else '',
-            qc_summary=self.__get_qc_summary(base_url=os.path.join(params.get('report_host'), r.name)) if r.name in reports['result'] else ''
+            files=[f.name for f in r.data_objects],
+            report_path=os.path.join(params.get('report_host'), r.name) if r.name.encode('utf-8') in reports['result'] else '',
+            qc_summary=self.__get_qc_summary(base_url=os.path.join(params.get('report_host'), r.name)) if r.name.encode('utf-8') in reports['result'] else ''
         ) for r in runs]
+
         self.logger.info("Runs: {} - success: {} - error: {}".format(total, res.get('success'),res.get('error')))
         return dict(objects=result, total=total, last=last, success=res.get('success'), error=res.get('error'))
 
@@ -122,7 +130,7 @@ class IrodsApiRestService(object):
         params.update(dict(irods_path=irods_path))
 
         res = self._iget(params)
-        samplesheet = [l.split(',') for l in res.get('result')]
+        samplesheet = [l.split(b',') for l in res.get('result')]
         self.logger.info(irods_path + " - success: {} - error: {}".format(
             res.get('success'),
             res.get('error')))
@@ -153,13 +161,13 @@ class IrodsApiRestService(object):
                             cmd=self._get_icmd(cmd=cmd, params=params),
                             switch=True)
         result = list()
-        indices = [i for i, s in enumerate(res['result']) if 'Rundir' in s]
+        indices = [i for i, s in enumerate(res['result']) if 'Rundir'.encode('utf8') in s]
         for i in indices:
-            rundir = res['result'][i].split('|')[3].split(' ')[1]
-            check_res = res['result'][i + 1].split('|')[3]
-            check_res = ast.literal_eval(check_res)
+            rundir = res['result'][i].split(b'|')[3].split(b' ')[1]
+            check_res = res['result'][i + 1].split(b'|')[3]
+            check_res = ast.literal_eval(check_res.decode('utf-8'))
             result.extend([dict(
-                run=self.__str(rundir),
+                run=rundir,
                 status=check_res[0],
                 ownership=check_res[1],
                 samplesheet=check_res[2],
@@ -251,18 +259,18 @@ class IrodsApiRestService(object):
         return dict(host=params.get('irods_host'),
                     port=params.get('irods_port'),
                     user=params.get('irods_user'),
-                    password=params.get('irods_password').encode('ascii'),
+                    password=params.get('irods_password'),
                     zone=params.get('irods_zone'))
 
     def _iinit(self, params):
         ir_conf = self._get_irods_conf(params)
 
-        ir = build_object_store(store='irods',
-                                host=ir_conf['host'],
-                                port=ir_conf['port'],
-                                user=ir_conf['user'],
-                                password=ir_conf['password'].encode('ascii'),
-                                zone=ir_conf['zone'])
+        ir = IrodsObjectStore(host=ir_conf['host'],
+                              port=ir_conf['port'],
+                              user=ir_conf['user'],
+                              password=ir_conf['password'],
+                              zone=ir_conf['zone'],
+                              logger=self.logger)
         return ir
 
     def _iexit(self, irods_session):
@@ -276,14 +284,14 @@ class IrodsApiRestService(object):
         try:
             irods_path = params.get('irods_path')
             exists, iobj = ir.exists(irods_path, delivery=True)
-            ir.sess.cleanup()
+            #ir.cleanup()
             if exists:
                 data_objects = [d for d in iobj.data_objects] if delivery else [d for d in iobj.data_objects]
                 data_objects.extend([d for d in iobj.subcollections] if delivery else [d for d in iobj.subcollections])
                 return dict(success='True', error=[], result=data_objects)
         except Exception as e:
             self.logger.error(str(e.message))
-            ir.sess.cleanup()
+            #ir.cleanup()
             return dict(success='False', error=[], result=[])
 
     def _imkdir(self, params):
@@ -294,14 +302,14 @@ class IrodsApiRestService(object):
                 collection = ir.get_object(src_path=obj_path)
             else:
                 collection = ir.create_object(dest_path=obj_path, collection=True)
-            ir.sess.cleanup()
+            #ir.cleanup()
             if collection and collection.path and len(collection.path) > 0:
                 res = dict(success='True', error=[], result=dict(name=collection.name, path=collection.path))
             else:
                 res = dict(success='False', error=[], result=[])
         except Exception as e:
             self.logger.error(str(e.message))
-            ir.sess.cleanup()
+            #ir.cleanup()
             res = dict(success='False', error=self.__str(e.message), result=[])
 
         return res
@@ -322,7 +330,7 @@ class IrodsApiRestService(object):
                     msg = '{} already exists'.format(irods_path)
                     return dict(success='False', error=[self.__str(msg)], result=[])
             obj = ir.get_object(irods_path)
-            ir.sess.cleanup()
+            #ir.cleanup()
 
             if obj and obj.path and len(obj.path) > 0:
                 res = dict(success='True', error=[], result=dict(name=obj.name, path=obj.path))
@@ -330,7 +338,7 @@ class IrodsApiRestService(object):
                 res = dict(success='False', error=[], result=[])
         except Exception as e:
             self.logger.error(str(e.message))
-            ir.sess.cleanup()
+            #ir.cleanup()
             res = dict(success='False', error=self.__str(e.message), result=[])
 
         return res
@@ -339,7 +347,7 @@ class IrodsApiRestService(object):
         ir = self._iinit(params)
         try:
             exists, iobj = ir.exists(params.get('irods_path'), delivery=True)
-            ir.sess.cleanup()
+            #ir.cleanup()
             if exists:
                 with iobj.open('r') as f:
                     lines = f.read().splitlines()
@@ -348,7 +356,7 @@ class IrodsApiRestService(object):
                 res = dict(success='False', error=[], result=[])
         except Exception as e:
             self.logger.error(str(e.message))
-            ir.sess.cleanup()
+            #ir.cleanup()
             res = dict(success='False', error=[], result=[])
 
         return res
@@ -361,10 +369,10 @@ class IrodsApiRestService(object):
                 ir.add_object_metadata(path=params.get('irods_path'),
                                        meta=(params.get('attr_name'),
                                              params.get('attr_value') if len(params.get('attr_value')) > 0 else None))
-            ir.sess.cleanup()
+            #ir.cleanup()
         except Exception as e:
             self.logger.error(str(e.message))
-            ir.sess.cleanup()
+            #ir.cleanup()
             pass
 
     def _get_run_info(self, params, run):
@@ -393,6 +401,7 @@ class IrodsApiRestService(object):
                                 host=params.get('host'),
                                 password=params.get('password'),
                                 cmd=self._get_icmd(cmd=cmd, params=params))
+        self.logger.info(res)
         return _run_info_parser(res)
 
     def _get_run_parameters(self, params, run):
@@ -453,14 +462,15 @@ class IrodsApiRestService(object):
                                 password=params.get('password'),
                                 cmd=self._get_icmd(cmd=cmd, params=params))
 
+        self.logger.info(res)
         return _run_parameters_parser(res)
 
     def __get_metadata(self, irods_obj):
 
         def retrieve_imetadata(iobj):
-                return [dict(name=str(m.name),
-                             value=str(m.value),
-                             units=str(m.units))
+                return [dict(name=m.name,
+                             value=m.value,
+                             units=m.units)
                         for m in iobj.metadata.items()]
 
         if len(irods_obj.metadata.items()) > 0:
@@ -478,6 +488,7 @@ class IrodsApiRestService(object):
         try:
             doc = parse(url)
         except Exception as e:
+            self.logger.error(e)
             return ''
         reports = list()
         for table in doc.iter('table'):
@@ -524,13 +535,13 @@ class IrodsApiRestService(object):
         remote = "{}@{}".format(user, host)
         self.logger.info(cmd)
         _= shlex.split("sshpass -p " + password + " ssh -oStrictHostKeyChecking=no " + remote + " " + cmd)
-        
 
         ssh = subprocess.Popen(args=_,
                                shell=False,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
-        result = [line.rstrip('\n') for line in ssh.stdout.readlines()]
+
+        result = [line.replace(b'\n', b'') for line in ssh.stdout.readlines()]
         error = ssh.stderr.readlines()
 
         if switch:

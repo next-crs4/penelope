@@ -3,6 +3,6 @@ lockfile
 bottle
 Paste
 lxml
-ushlex
-git+https://github.com/gmauro/alta.git
+python-irodsclient
+bikaclient==0.5.6
 comoda==0.4.0

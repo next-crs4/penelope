@@ -3,8 +3,16 @@ from bottle import post, get, run, response, request
 import json
 
 
-# from bikaclient import BikaClient
-from alta.bims import Bims
+from libs.bims import Bims
+
+
+class MyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (bytes, bytearray)):
+            return obj.decode("latin1") # <- or any other encoding of your choice
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
+
 
 class BikaApiRestService(object):
 
@@ -15,12 +23,13 @@ class BikaApiRestService(object):
 
     def _get_bika_instance(self, params):
         self.logger.info("{} asks to  log in {}".format(params.get('username'),
-                                                        params.get('host') ) )
+                                                        params.get('host')))
         bika = Bims(host=params.get('host'),
                     user=params.get('username'),
                     password=params.get('password'),
-                    bims_label='bikalims').bims
-        return bika.client
+                    logger=self.logger
+                    ).bims
+        return bika
 
     def _success(self, body, return_code=200):
         response.headers['Access-Control-Allow-Origin'] = '*'
@@ -28,7 +37,8 @@ class BikaApiRestService(object):
         response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
         response.content_type = 'application/json'
         response.status = return_code
-        return json.dumps({'result': body}, encoding='latin1')
+        result=dict(result=body)
+        return json.dumps(result, cls=MyEncoder)
 
     def _get_params(self, request_data):
         for item in request_data:
@@ -47,7 +57,7 @@ class BikaApiRestService(object):
     def test_server(self):
         status = {'status':'Server running'}
         self.logger.debug("Server is running")
-        return json.dumps({'result': status}, encoding='latin1')
+        return json.dumps({'result': status}, cls=MyEncoder)
 
     @wrap_default
     def login(self):
@@ -225,8 +235,7 @@ class BikaApiRestService(object):
                 date_received=self.__str(r['DateReceived']),
                 date_published=self.__str(r['DatePublished']),
                 date_created=self.__str(r['creation_date']),
-                review_state=self.__str(r['review_state']) if 'published' in self.__str(r['review_state']) else self.__str(r['subject'][0]),
-                    #review_state=self.__str(r['subject'][0]) if 'publishself.__str(r['review_state']) else self.__str(r['review_state']),
+                review_state=r['review_state'] if 'published' in r['review_state'] else r['subject'][0],
                 remarks=self.__str(r['Remarks']),
                 rights=self.__str(r['rights']),
                 results_interpretation=self.__str(r['ResultsInterpretation']),
@@ -371,8 +380,8 @@ class BikaApiRestService(object):
                 rights=self.__str(r['rights']),
                 remarks=self.__str(r['Remarks']),
                 invoice=self.__str(r['Invoice']),
-                client_id=self.__str(r['path']).split('/')[-2],
-                review_state=self.__str(r['subject'][0]) if len(r['subject'])==1 else '',
+                client_id=r['path'].split('/')[-2],
+                review_state=r['subject'][0] if len(r['subject'])==1 else '',
                 contributors=self.__str(r['contributors'][0]) if len(r['contributors'])==1 else '',
                 uid=self.__str(r['UID']),
                 creator=self.__str(r['Creator']),
@@ -433,7 +442,7 @@ class BikaApiRestService(object):
             uid=self.__str(r['UID']),
             creator=self.__str(r['Creator']),
             transitions=[dict(id=self.__str(t['id']), title=self.__str(t['title'])) for t in r['transitions']],
-        ) for r in res['objects'] if 'bika_labproducts' not in self.__str(r['id'])]
+        ) for r in res['objects'] if 'bika_labproducts' not in r['id']]
         self.logger.info("Lab Products: {} - success: {} - error: {} ".format(
             self.__str(res['total_objects']),
             self.__str(res['success']),
@@ -497,7 +506,7 @@ class BikaApiRestService(object):
             uid=self.__str(r['UID']),
             creator=self.__str(r['Creator']),
             transitions=[dict(id=self.__str(t['id']), title=self.__str(t['title'])) for t in r['transitions']],
-        ) for r in res['objects'] if 'bika_manufacturers' not in self.__str(r['id'])]
+        ) for r in res['objects'] if 'bika_manufacturers' not in r['id']]
         self.logger.info("Manufactures: {} - success: {} - error: {} ".format(
             self.__str(res['total_objects']),
             self.__str(res['success']),
@@ -1123,7 +1132,7 @@ class BikaApiRestService(object):
             email_address=self.__str(r['EmailAddress']),
             phone=self.__str(r['HomePhone']),
             path=self.__str(r['path'])
-        ) for r in contacts['objects'] if client_id in r['path']]
+        ) for r in contacts['objects'] if str(client_id) in r['path']]
 
     def _get_client_batches(self, client_name, batches):
 
@@ -1169,7 +1178,7 @@ class BikaApiRestService(object):
                 uid=self.__str(r['UID']),
                 creator=self.__str(r['Creator']),
                 transitions=[dict(id=self.__str(t['id']), title=self.__str(t['title'])) for t in r['transitions']],
-        ) for r in supply_orders['objects'] if client_id in r['path']]
+        ) for r in supply_orders['objects'] if str(client_id) in r['path']]
 
     def _get_analysis_requests(self, batch_id):
         params = self._get_params(request.forms)

@@ -29,8 +29,8 @@ help:
 
 start: check config
 	docker-compose -f ./back/docker-compose.yml build --build-arg USER_ID=${USERID} --build-arg GROUP_ID=${GROUPID}
-	docker-compose -f ./back/docker-compose.yml up -d
 	docker-compose -f ./front/docker-compose.yml up -d
+	docker-compose -f ./back/docker-compose.yml up -d
 
 stop:
 	docker-compose -f ./back/docker-compose.yml down
