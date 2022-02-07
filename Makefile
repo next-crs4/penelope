@@ -11,6 +11,8 @@ else
 GROUPID=$(shell id -g)
 endif
 
+
+
 help:
 	@echo " "
 	@echo " Penelope - a complete LIMS for NGS Labs "
@@ -21,8 +23,13 @@ help:
 	@echo "     stop            bring down Penelope LIMS"
 	@echo "     clean           remove Penelope LIMS from your computer"
 	@echo "  "
-	@echo " To redirect logs on a ELK stack a, digit: "
-	@echo "		make ELK_HOST=your-elk-site.com ELK_PORT=5044 start"
+	@echo " options:"
+	@echo " 	LOG_PATH				destination folder of log files"
+	@echo " 	ELK_HOST				the host of the Logstash server"
+	@echo " 	ELK_PORT				the port of the Logstash server"
+
+	@echo " usage: "
+	@echo "		make LOG_PATH=/path/to/log/files [ELK_HOST=your-elk-site.com ELK_PORT=5044] start"
 	@echo " "
 	@echo " Docs: https://github.com/next-crs4/penelope/blob/master/README.md"
 	@echo " "
@@ -37,11 +44,18 @@ stop:
 	docker-compose -f ./front/docker-compose.yml down
 
 check:
+ifndef LOG_PATH
+	echo "ERROR: argument LOG_PATH is required" && exit 1
+endif
 	@[ -f ${INIT_FILE} ] || { echo "ERROR: init file (${INIT_FILE}) doesn't exist"; echo "exiting.."; exit 1; }
 	if [ -f ${ENV_FILE} ]; then  rm ${ENV_FILE}; fi;
 
 config:
 	touch ${ENV_FILE}
+ifdef LOG_PATH
+	mkdir -p ${LOG_PATH}
+	echo "LOG_PATH=${LOG_PATH}" >> ${ENV_FILE}
+endif
 ifdef ELK_HOST
 	echo "ELK_HOST=${ELK_HOST}" >> ${ENV_FILE}
 endif
@@ -52,4 +66,4 @@ endif
 clean: stop
 	docker rmi back_back:latest
 	docker rmi nginx:latest
-	docker rmi python:2.7
+	docker rmi python:3.8

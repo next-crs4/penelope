@@ -1,9 +1,9 @@
 version: "3"
 services:
-    client:
-        image: nginx
+    web:
+        image: nginx:latest
         container_name: fr01
         ports:
-            - 81:80
+            - 88:80
         volumes:
             - ./html:/usr/share/nginx/html

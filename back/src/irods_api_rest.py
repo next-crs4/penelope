@@ -13,14 +13,7 @@ import ast
 from distutils.util import strtobool
 from lxml.html import parse
 from libs.yrods import IrodsObjectStore
-
-
-class MyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, (bytes, bytearray)):
-            return obj.decode("latin1") # <- or any other encoding of your choice
-        # Let the base class default method raise the TypeError
-        return json.JSONEncoder.default(self, obj)
+from libs import BikaEncoder
 
 class IrodsApiRestService(object):
     def __init__(self, logger):
@@ -60,7 +53,7 @@ class IrodsApiRestService(object):
         response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
         response.content_type = 'application/json'
         response.status = return_code
-        return json.dumps({'result': body}, cls=MyEncoder)
+        return json.dumps({'result': body}, cls=BikaEncoder)
 
     def _get_params(self, request_data):
         for item in request_data:
@@ -560,7 +553,7 @@ class IrodsApiRestService(object):
 
             get_running_folders="ls {}".format(params.get('run_folder')),
 
-            check_runs="presta check",
+            check_runs="docker exec presta presta check",
 
             get_report_folders="ls {}".format(params.get('report_folder')),
 

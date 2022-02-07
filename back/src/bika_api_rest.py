@@ -2,16 +2,8 @@ from functools import wraps
 from bottle import post, get, run, response, request
 import json
 
-
+from libs import BikaEncoder
 from libs.bims import Bims
-
-
-class MyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, (bytes, bytearray)):
-            return obj.decode("latin1") # <- or any other encoding of your choice
-        # Let the base class default method raise the TypeError
-        return json.JSONEncoder.default(self, obj)
 
 
 class BikaApiRestService(object):
@@ -19,7 +11,6 @@ class BikaApiRestService(object):
     def __init__(self, logger):
         self.user_roles = ['Site Administrator', 'LabManager', 'Analyst', 'LabClerk', 'Client']
         self.logger = logger
-        pass
 
     def _get_bika_instance(self, params):
         self.logger.info("{} asks to  log in {}".format(params.get('username'),
@@ -38,7 +29,7 @@ class BikaApiRestService(object):
         response.content_type = 'application/json'
         response.status = return_code
         result=dict(result=body)
-        return json.dumps(result, cls=MyEncoder)
+        return json.dumps(result, cls=BikaEncoder)
 
     def _get_params(self, request_data):
         for item in request_data:
@@ -57,7 +48,7 @@ class BikaApiRestService(object):
     def test_server(self):
         status = {'status':'Server running'}
         self.logger.debug("Server is running")
-        return json.dumps({'result': status}, cls=MyEncoder)
+        return json.dumps({'result': status}, cls=BikaEncoder)
 
     @wrap_default
     def login(self):
@@ -1012,7 +1003,7 @@ class BikaApiRestService(object):
         params = self._get_params(request.forms)
         bika = self._get_bika_instance(params)
         res = bika.update_many(self._format_params(params))
-        return self._outcome_update(res, params)
+        return self._outcome_update(res)
 
     @wrap_default
     def update_analysis_request(self):
@@ -1020,6 +1011,7 @@ class BikaApiRestService(object):
         params = self._get_params(request.forms)
         bika = self._get_bika_instance(params)
         res = bika.update(self._format_params(params))
+        self.logger(res)
         return self._outcome_update(res)
 
     @wrap_default
@@ -1036,7 +1028,7 @@ class BikaApiRestService(object):
         params = self._get_params(request.forms)
         bika = self._get_bika_instance(params)
         res = bika.update(self._format_params(params))
-        return self._outcome_update(res, params)
+        return self._outcome_update(res)
 
     @wrap_default
     def update_worksheets(self):
@@ -1233,7 +1225,7 @@ class BikaApiRestService(object):
                     environmental_conditions.append(dict(label=self.__str(items[0]), value=self.__str(items[1])))
         elif len(str_environmental_conditions.strip()) > 0:
             for evc in json.loads(str_environmental_conditions):
-                for k,v in evc.iteritems():
+                for k,v in evc.items():
                     environmental_conditions.append(dict(label=self.__str(k), value=self.__str(v)))
 
         return  environmental_conditions
@@ -1256,41 +1248,62 @@ class BikaApiRestService(object):
     def _outcome_creating(self, res, params):
         result = None
         if 'obj_id' in res:
-            result = dict(success='True', obj_id=self.__str(res['obj_id']))
-            self.logger.info("successfully created with ID: " + result.get('obj_id'))
+            result = dict(success='True',
+                          obj_id=self.__str(res['obj_id']))
+
+            self.logger.info("successfully created with ID: {}".format(result.get('obj_id').decode('utf8')))
+
         elif 'ar_id' in res and 'sample_id' in res:
-            result = dict(success='True', ar_id=self.__str(res['ar_id']), sample_id=self.__str(res['sample_id']))
-            self.logger.info("successfully created with IDs: " + result.get('ar_id') + " " + result.get('sample_id'))
+            result = dict(success='True', ar_id=self.__str(res['ar_id']),
+                          sample_id=self.__str(res['sample_id']))
+
+            self.logger.info("successfully created with IDs: {} | {}".format(result.get('ar_id').decode('utf-8'),
+                                                                             result.get('sample_id').decode('utf-8')))
+
         elif 'message' in res and 'The following request fields were not used: [\'obj_id\'].  Request aborted.' not in self.__str(res['message']):
-            result = dict(success='False', message=self.__str(res['message']))
-            self.logger.error("Error: " + result.get('message'))
+            result = dict(success='False',
+                          message=self.__str(res['message']))
+
+            self.logger.error("Error: {}".format(result.get('message').decode('utf-8')))
+
         elif 'message' in res and 'The following request fields were not used: [\'obj_id\'].  Request aborted.' in self.__str(res['message']):
-            result = dict(success='True', obj_id=self.__str(params['obj_id']))
-            self.logger.info("successfully created with ID: " + result.get('obj_id'))
+            result = dict(success='True',
+                          obj_id=self.__str(params['obj_id']))
+
+            self.logger.info("successfully created with ID: {}".format(result.get('obj_id').decode("utf-8")))
 
         return result if result else res
 
     def _outcome_action(self, res):
         if 'message' in res:
-            result = dict(success='False', message=self.__str(res['message']))
-            self.logger.error("Error: " + result.get('message'))
+            result = dict(success='False',
+                          message=self.__str(res['message']))
+
+            self.logger.error("Error: {}".format(result.get('message').decode('utf-8')))
+
         else:
             result = dict(success='True')
-            self.logger.error("successfully")
+            self.logger.info("successfully")
 
         return result if result else res
 
     def _outcome_update(self, res):
+        self.logger.info("RES: {}".format(res))
         if 'message' in res:
-            result = dict(success='False', message=self.__str(res['message']))
-            self.logger.error("Error: " + result.get('message'))
+            result = dict(success='False',
+                          message=self.__str(res['message']))
+
+            self.logger.error("Error: " + result.get('message').decode('utf-8'))
+
         else:
-            result = dict(success='True', updates=[{self.__str(k): self.__str(v)}  for t in res['updates'] for k,v in t.iteritems()] if 'updates' in res else list())
-            self.logger.error("successfully updated: ")
+            result = dict(success='True',
+                          updates=[{k: v} for t in res['updates'] for k, v in t.items()] if 'updates' in res else list())
+
+            self.logger.info("successfully updated")
 
         return result if result else res
     
     def __str(self, txt):
-        if isinstance(txt, (type(None),int,float)):
+        if isinstance(txt, (type(None), int, float)):
             txt = str(txt)
         return txt.encode('latin-1', 'ignore')
