@@ -1,10 +1,9 @@
 version: "3"
 services:
     web:
-        image: nginx:latest
+        build: .
         container_name: fr01
         ports:
             - 88:80
         volumes:
             - ./html:/usr/share/nginx/html
-            - ./config/nginx:/etc/nginx/conf.d

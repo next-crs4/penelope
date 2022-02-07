@@ -36,6 +36,7 @@ help:
 
 start: check config
 	docker-compose -f ./back/docker-compose.yml build --build-arg USER_ID=${USERID} --build-arg GROUP_ID=${GROUPID}
+	docker-compose -f ./front/docker-compose.yml build
 	docker-compose -f ./front/docker-compose.yml up -d
 	docker-compose -f ./back/docker-compose.yml up -d
 
@@ -48,19 +49,19 @@ ifndef LOG_PATH
 	echo "ERROR: argument LOG_PATH is required" && exit 1
 endif
 	@[ -f ${INIT_FILE} ] || { echo "ERROR: init file (${INIT_FILE}) doesn't exist"; echo "exiting.."; exit 1; }
-	if [ -f ${ENV_FILE} ]; then  rm ${ENV_FILE}; fi;
+	@[ -f ${ENV_FILE} ] &&  { rm ${ENV_FILE}; }
 
 config:
-	touch ${ENV_FILE}
+	@touch ${ENV_FILE}
 ifdef LOG_PATH
-	mkdir -p ${LOG_PATH}
-	echo "LOG_PATH=${LOG_PATH}" >> ${ENV_FILE}
+	@mkdir -p ${LOG_PATH}
+	@echo "LOG_PATH=${LOG_PATH}" >> ${ENV_FILE}
 endif
 ifdef ELK_HOST
-	echo "ELK_HOST=${ELK_HOST}" >> ${ENV_FILE}
+	@echo "ELK_HOST=${ELK_HOST}" >> ${ENV_FILE}
 endif
 ifdef ELK_PORT
-	echo "ELK_PORT=${ELK_PORT}" >> ${ENV_FILE}
+	@echo "ELK_PORT=${ELK_PORT}" >> ${ENV_FILE}
 endif
 
 clean: stop
