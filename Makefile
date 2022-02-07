@@ -49,7 +49,7 @@ ifndef LOG_PATH
 	echo "ERROR: argument LOG_PATH is required" && exit 1
 endif
 	@[ -f ${INIT_FILE} ] || { echo "ERROR: init file (${INIT_FILE}) doesn't exist"; echo "exiting.."; exit 1; }
-	@[ -f ${ENV_FILE} ] &&  { rm ${ENV_FILE}; }
+	if [ -f ${ENV_FILE} ]; then  rm ${ENV_FILE}; fi
 
 config:
 	@touch ${ENV_FILE}

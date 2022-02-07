@@ -5,5 +5,3 @@ services:
         container_name: fr01
         ports:
             - 88:80
-        volumes:
-            - ./html:/usr/share/nginx/html
