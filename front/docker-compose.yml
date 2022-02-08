@@ -7,3 +7,11 @@ services:
             - 88:80
         volumes:
             - ./html:/usr/share/nginx/html
+        networks:
+            - frontend
+
+networks:
+  frontend:
+    ipam:
+      config:
+        - subnet: 172.27.0.0/16
