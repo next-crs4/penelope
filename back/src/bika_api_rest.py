@@ -1288,7 +1288,6 @@ class BikaApiRestService(object):
         return result if result else res
 
     def _outcome_update(self, res):
-        self.logger.info("RES: {}".format(res))
         if 'message' in res:
             result = dict(success='False',
                           message=self.__str(res['message']))

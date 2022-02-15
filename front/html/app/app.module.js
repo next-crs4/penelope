@@ -94,6 +94,7 @@ main_module.run(
 			}
 
 			$rootScope.qc_report = init.sshApiRest.report_host;
+			$rootScope.ssheet_templates = init.irodsApiRest.ssheet_templates;
 
 		$rootScope.$on('$stateChangeStart', function (event, next) {
 

@@ -46,14 +46,16 @@ class IrodsObjectStore(object):
                 exists = False
                 obj = None
         session.cleanup()
-        return exists, obj
+        return (exists, obj)
 
     def is_a_collection(self, obj_path):
-        exists, obj = self.exists(obj_path, delivery=True)
+        ret = self.exists(obj_path, delivery=True)
+        obj = ret[1]
         return True if isinstance(obj, iRODSCollection) else False
 
     def is_a_data_object(self, obj_path):
-        exists, obj = self.exists(obj_path, delivery=True)
+        ret = self.exists(obj_path, delivery=True)
+        obj = ret[1]
         return True if isinstance(obj, iRODSDataObject) else False
 
     def create_object(self, dest_path, collection=True):
@@ -73,7 +75,7 @@ class IrodsObjectStore(object):
         session = iRODSSession(host=self.host, port=self.port, user=self.user, password=self.password, zone=self.zone)
         session.connection_timeout = 300
 
-        if not self.exists(dest_path):
+        if not self.exists(dest_path)[0]:
             if collection:
                 obj = session.collections.create(dest_path)
             else:
@@ -104,8 +106,9 @@ class IrodsObjectStore(object):
 
         if src_path.startswith(prefix):
             src_path = os.path.join(src_path.replace(prefix, '/'))
-        exists, obj = self.exists(src_path, delivery=True)
-
+        ret = self.exists(src_path, delivery=True)
+        exists = ret[0]
+        obj = ret[1]
         if exists and dest_path:
             ensure_dir(os.path.dirname(dest_path))
             with open(dest_path, 'w') as df:
@@ -143,7 +146,7 @@ class IrodsObjectStore(object):
         new_object = False
 
         if os.path.isfile(source_path):
-            if self.exists(dest_path):
+            if self.exists(dest_path)[0]:
                 obj = session.data_objects.get(dest_path)
             else:
                 obj = self.create_object(dest_path, collection=False)
@@ -219,8 +222,6 @@ class IrodsObjectStore(object):
                'units': meta[2] if type(meta[2]) == str else str(meta[2])}
 
         if avu in obj_metadata:
-            self.logger.error("AVU {} already present into the catalog".format(
-                avu))
-            raise RuntimeError("AVU already present into the catalog")
+            self.logger.info("AVU {} already present into the catalog".format(avu))
         else:
             obj.metadata.add(avu['name'], avu['value'], avu['units'])

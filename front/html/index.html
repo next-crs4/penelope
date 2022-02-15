@@ -7,9 +7,6 @@
     <title>Penelope</title>
     <link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
-    <!--<link rel="stylesheet" href="./assets/bower_components/bootstrap/dist/css/themes/spacelab/bootstrap.min.css">-->
-    <!--<link rel="stylesheet/less" href="./assets/bower_components/bootstrap/dist/css/themes/spacelab/variables.less">-->
-    <!--<link rel="stylesheet/less" href="./assets/bower_components/bootstrap/dist/css/themes/spacelab/bootwatch.less">-->
 
     <link rel="stylesheet" href="assets/bower_components/quantumui/dist/css/addon/effect-light.min.css">
     <link rel="stylesheet" href="assets/bower_components/quantumui/dist/css/quantumui.min.css">
@@ -20,9 +17,6 @@
     <link rel="stylesheet" href="assets/bower_components/dangle/css/dangle.css">
     <link rel="stylesheet" href="assets/css/radial_progress/radialProgress.css">
 
-    <!--&lt;!&ndash; DevExtreme themes &ndash;&gt;-->
-    <!--<link rel="stylesheet" type="text/css" href="assets/bower_components/devextreme/css/dx.common.css" />-->
-    <!--<link rel="stylesheet" type="text/css" href="assets/bower_components/devextreme/css/dx.light.css" />-->
 
     <script src="./assets/bower_components/underscore/underscore.js"></script>
     <script src="./assets/bower_components/angular/angular.min.js"></script>
@@ -48,7 +42,6 @@
     <script src="./assets/bower_components/dangle/dist/dangle.min.js"></script>
     <script src="./assets/js/radial_progress/radialProgress.js"></script>
 
-    <!--<script src="./assets/bower_components/devextreme/js/dx.all.js"></script>-->
     <script src="./assets/bower_components/chart.js/dist/Chart.min.js"></script>
     <script src="./assets/bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
 
@@ -128,15 +121,18 @@
                             </a>
                             <ul class="dropdown-menu" tabindex="-1" role="menu">
                                 <li role="presentation"  ng-class="getClass('samplesheet_upload')">
-                                    <a role="menuitem" tabindex="-1" ui-sref="samplesheet_upload">Upload</a>
+                                    <a role="menuitem" tabindex="-1" ui-sref="samplesheet_upload">Upload - Current</a>
                                 </li>
                                 <li role="presentation"  ng-class="getClass('samplesheet_replace')">
-                                    <a role="menuitem" tabindex="-1" ui-sref="samplesheet_replace">Replace</a>
+                                    <a role="menuitem" tabindex="-1" ui-sref="samplesheet_replace">Upload - All</a>
                                 </li>
-                                <!--<li role="presentation"  ng-class="getClass('samplesheet_delete')"-->
-                                    <!--data-ng-if="currentUser.role=='Site Administrator' || currentUser.role=='LabManager'">-->
-                                    <!--<a role="menuitem" tabindex="-1" ui-sref="samplesheet_delete">Delete</a>-->
-                                <!--</li>-->
+<!--                                <li role="presentation"  ng-class="getClass('samplesheet_delete')">-->
+<!--                                    <a role="menuitem" tabindex="-1" ui-sref="samplesheet_delete">Delete</a>-->
+<!--                                </li>-->
+                                <li role="presentation"  >
+                                    <a role="menuitem" tabindex="-1"  href="{{ssheet_templates}}"
+                                       onclick="window.open(this.href);return false">Templates</a>
+                                </li>
                             </ul>
                         </li>
                         <li data-ng-if="currentUser.role!='LabClerk'" ng-class="getClass('runs')">

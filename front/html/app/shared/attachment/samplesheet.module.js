@@ -115,7 +115,7 @@ samplesheet_module.controller('Link2RunCtrl',
         });
         $scope.importing = Utility.loading({
             busyText: 'Wait while importing samplesheet...',
-            delayHide: 10000,
+            delayHide: 50000,
         });
 
 
@@ -126,7 +126,7 @@ samplesheet_module.controller('Link2RunCtrl',
 				IrodsService.getRunningFolders(this.params).success(function (data, status, header, config){
 					$scope.loading.hide();
 					$scope.run_folders = data.result.objects;
-					console.log($scope.run_folders)
+					//console.log($scope.run_folders)
 				});
 			}
 
@@ -228,7 +228,8 @@ samplesheet_module.controller('Link2RunCtrl',
 					pe_id: (samplesheet_params.reagents!= null && samplesheet_params.reagents.pe.id!=null)?samplesheet_params.reagents.pe.id:'',
 					sbs_id: (samplesheet_params.reagents!= null && samplesheet_params.reagents.sbs.id!=null)?samplesheet_params.reagents.sbs.id:'',
 					index_id: (samplesheet_params.reagents!= null && samplesheet_params.reagents.index.id!=null)?samplesheet_params.reagents.index.id:'',
-					overwrite_if_exists: $scope.is_replace.toString().substr(0,1).toUpperCase( )+$scope.is_replace.toString().substr(1),
+					overwrite_if_exists: "True",
+				    projects: samplesheet_params.projects,
 				}
 
 				IrodsService.putSamplesheet(this.params).success(function (data, status, header, config){
@@ -243,14 +244,16 @@ samplesheet_module.controller('Link2RunCtrl',
                         });
 						BikaService.updateAnalysisRequests(this.params_update).success(function (data, status, header, config){
 							Utility.alert({title:'Success', content: 'Samplesheet has been successfully imported', alertType:'success'});
+                            $state.go('runs');
 						});
 					}
 					else {
 						Utility.alert({title:'There\'s been an error<br/>',
 	 					content: data.result.error.join(" ") + " " +  data.result.objects.join(" "),
 	 					alertType:'danger'});
+                        $scope.importing.hide();
 					}
-					$scope.importing.hide();
+
 
 				});
 	 		}
@@ -259,10 +262,12 @@ samplesheet_module.controller('Link2RunCtrl',
 	 		function(samplesheet_params) {
 	 			//check samplesheet
 	 			var samples = Array();
+	 			var projects = Array();
 	 			var lanes = {};
 	 			var start_sample_list = false;
 	 			var ilanes = 0;
 	 			var isampleid = 0;
+	 			var iproj = 0;
 	 			$scope.importing.show();
 
 	 			_.each(samplesheet_params.samplesheet, function(row) {
@@ -273,6 +278,13 @@ samplesheet_module.controller('Link2RunCtrl',
 	 					if (_.indexOf(samples,row[isampleid]) === -1 && row[isampleid] !== undefined && row[isampleid] !== '') {
 	 						samples.push(row[isampleid]);
 	 					}
+	 					if (_.indexOf(projects,row[iproj]) === -1 && row[iproj] !== undefined && row[iproj] !== '') {
+	 						projects.push(row[iproj]);
+	 					}
+					}
+
+                    if (_.indexOf(row,'Sample_Project') !== -1){
+						iproj = _.indexOf(row,'Sample_Project');
 					}
 
 					if (_.indexOf(row,'Sample_ID') !== -1){
@@ -280,11 +292,13 @@ samplesheet_module.controller('Link2RunCtrl',
 						isampleid = _.indexOf(row,'Sample_ID');
 						ilanes = _.indexOf(row,'Lane');
 					}
+
+
 	 			});
 
 				nlanes = samplesheet_params.switchMode?2:8;
 				nlanes = samplesheet_params.instrument === "MiSeq" ? 0: nlanes;
-	 			if (_.keys(lanes).length != nlanes) {
+	 		/*	if (_.keys(lanes).length != nlanes) {
 	 				Utility.alert({title:'There\'s been an error<br/>',
 	 					content: "Expecting "+nlanes + " lanes, found " + _.keys(lanes).length +": "+ _.keys(lanes).join(','),
 	 					alertType:'danger'});
@@ -303,7 +317,7 @@ samplesheet_module.controller('Link2RunCtrl',
 	 					content: "Expecting 1,2,3,4,5,6,7,8 lanes, found "+ _.keys(lanes).join(','),
 	 					alertType:'danger'});
 	 				return;
-	 			}
+	 			}*/
 
 	 			if (nlanes==0 && !_.isEqual(_.keys(lanes),[])) {
 	 				Utility.alert({title:'There\'s been an error<br/>',
@@ -330,6 +344,9 @@ samplesheet_module.controller('Link2RunCtrl',
 						return;
 	 				}
 	 				else {
+
+	 				    samplesheet_params.projects = _.uniq(projects).join('-');
+	 				    console.log(samplesheet_params)
 	 					$scope.link_samplesheet(samplesheet_params, data.result.objects);
 	 				}
 	 			});

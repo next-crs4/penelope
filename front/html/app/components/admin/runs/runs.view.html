@@ -106,29 +106,39 @@
                                             </tr>
                                         </table>
                                  </div>
-
-
                             </div>
                         </td>
                         <td>
-                            <a class="pull-left btn btn-primary btn-xs" href="{{row.report_path}}" style="text-decoration: none;" target="_blank" ng-if="row.report_path!=''">
+                            <a class="pull-left btn btn-primary btn-xs" href="{{row.report_path}}"
+                               style="text-decoration: none;" target="_blank" ng-if="row.report_path!=''">
                                  <span class="glyphicon glyphicon-link"></span>
                             </a>
-                            <span class="fic glyphicon glyphicon-remove" style="margin-left:10px;" ng-if="row.report_path==''"></span>
+                            <span class="fic glyphicon glyphicon-remove" style="margin-left:10px;"
+                                  ng-if="row.report_path==''"></span>
 
                         </td>
                         <td>
-                            <div  ng-if="_.indexOf(row.files, 'SampleSheet.csv') > -1">
-                                <button type="button" data-nq-toggle-modal="#showAttachment" class="pull-left btn btn-primary btn-xs"
-                                  data-placement="right" data-effect="from-right" data-qs-title="'Show Samplesheet'" ng-click="ctrl.show_samplesheet(row.run, row.path)">
-                                    <span class="glyphicon glyphicon-eye-open"></span>
-                                </button>
-                         <div id="showAttachment" class="clearfix" data-nq-modal="" data-qo-independent="true" data-qo-screen-mode="true" data-qo-content-template="">
-                            <ng-include src="'app/shared/attachment/show_attachment.modal.html'"></ng-include>
-                         </div>
+                            <div ng-repeat="f in row.files">
+                                <div ng-show="f.startsWith('SampleSheet')" style="margin-bottom:10px;">
+                                    <button type="button" data-nq-toggle-modal="#showAttachment"
+                                        class="pull-left btn btn-primary btn-xs"
+                                        data-placement="right" data-effect="from-right" data-qs-title="'Show Samplesheet'"
+                                        ng-click="ctrl.show_samplesheet(row.run, row.path, f)">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button>&nbsp;
+                                    <span class="small">{{f.replace('SampleSheet-','')}}</span>
+                                </div>
+
+                                <div id="showAttachment" class="clearfix" data-nq-modal=""
+                                     data-qo-independent="true"
+                                     data-qo-screen-mode="true" data-qo-content-template="">
+                                    <ng-include src="'app/shared/attachment/show_attachment.modal.html'"></ng-include>
+                                </div>
                             </div>
 
-                            <span ng-if="_.indexOf(row.files, 'SampleSheet.csv') == -1" class="fic glyphicon glyphicon-remove" style="margin-left:10px;"></span>
+
+                            <span ng-if="_.without(row.files, ['RunInfo.xml', runParameters.xml]).length == 0"
+                                  class="fic glyphicon glyphicon-remove" style="margin-left:10px;"></span>
 
                         </td>
                     </tr>

@@ -66,17 +66,18 @@ runs_module.controller('RunsCtrl',
 
 		}
 
-		this.show_samplesheet = function(run, path) {
-			$scope.attachment = {content: null, run: null};
-			this.params = {run: run, path: path}
+		this.show_samplesheet = function(run, path, ssheet) {
+			$scope.attachment = {content: null, run: null, ssheet: null};
+			this.params = {run: run, path: path, ssheet: ssheet}
 			IrodsService.getSamplesheet(this.params).success(function (data, status, header, config){
                    $scope.attachment.content = data.result.objects;
                    $scope.attachment.run = run;
+                   $scope.attachment.ssheet = ssheet.replace('SampleSheet-','');
                 });
 		}
 
 		this.get_filename = function() {
-			return $scope.attachment.run + ".csv"
+			return $scope.attachment.ssheet.startsWith('SampleSheet') ? $scope.attachment.run + ".csv" : $scope.attachment.run + "-" +  $scope.attachment.ssheet
 		}
 
 		this.hide = true;

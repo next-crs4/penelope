@@ -3,7 +3,7 @@ from functools import wraps
 from bottle import post, get, run, response, request
 
 import xml.etree.ElementTree as ET
-import os
+import os, sys
 import subprocess
 import json
 from tempfile import NamedTemporaryFile
@@ -107,7 +107,6 @@ class IrodsApiRestService(object):
             report_path=os.path.join(params.get('report_host'), r.name) if r.name.encode('utf-8') in reports['result'] else '',
             qc_summary=self.__get_qc_summary(base_url=os.path.join(params.get('report_host'), r.name)) if r.name.encode('utf-8') in reports['result'] else ''
         ) for r in runs]
-
         self.logger.info("Runs: {} - success: {} - error: {}".format(total, res.get('success'),res.get('error')))
         return dict(objects=result, total=total, last=last, success=res.get('success'), error=res.get('error'))
 
@@ -119,7 +118,8 @@ class IrodsApiRestService(object):
         rundir_collection = params.get('samplesheet_collection')
         rundir = params.get('run')
         ipath = params.get('path')
-        irods_path = os.path.join(ipath, "SampleSheet.csv") if ipath else os.path.join(rundir_collection, rundir, "SampleSheet.csv")
+        ssheet = params.get('ssheet', 'SampleSheet.csv')
+        irods_path = os.path.join(ipath, ssheet) if ipath else os.path.join(rundir_collection, rundir, ssheet)
         params.update(dict(irods_path=irods_path))
 
         res = self._iget(params)
@@ -188,17 +188,19 @@ class IrodsApiRestService(object):
 
                 result.extend([dict(
                     path=str(this_run_folder),
-                    running_folder=str(r),
+                    running_folder=r.decode('utf-8'),
                     run_info=self._get_run_info(params=params,
-                                                run=str(r)),
+                                                run=r.decode('utf-8')),
                     run_parameters=self._get_run_parameters(params=params,
-                                                            run=str(r)),
+                                                            run=r.decode('utf-8')),
                 ) for r in res['result']])
+
         if len(result) == 0:
             result.append(dict(
                 running_folder='MISSING RUN FOLDER',
                 run_info=dict(),
                 run_parameters=dict()))
+
         self.logger.info("Runs: {} - success: {} - error: {}".format(len(result),
                                                                      res.get('success'),
                                                                      res.get('error')))
@@ -212,7 +214,7 @@ class IrodsApiRestService(object):
 
         # creating samplesheet file
         samplesheet = json.loads(params.get('samplesheet'))
-        f = NamedTemporaryFile(delete=False)
+        f = NamedTemporaryFile(mode="w", delete=False)
 
         with f:
             writer = csv.writer(f)
@@ -223,6 +225,7 @@ class IrodsApiRestService(object):
         # creating run_dir collection
         rundir_collection = os.path.join(params.get('samplesheet_collection'),
                                          params.get('illumina_run_directory'))
+        self.logger.info("rundir_collection: {}".format(rundir_collection))
         params.update(dict(collection=rundir_collection))
 
         res = self._imkdir(params)
@@ -230,7 +233,8 @@ class IrodsApiRestService(object):
         if 'success' in res and res.get('success') in "True":
 
             params.update(dict(local_path=local_path,
-                               irods_path=os.path.join(rundir_collection, "SampleSheet.csv")))
+                               irods_path=os.path.join(rundir_collection,
+                                                       "SampleSheet-{}.csv".format(params.get('projects')))))
 
             res = self._iput(params=params)
 
@@ -291,7 +295,11 @@ class IrodsApiRestService(object):
         ir = self._iinit(params)
         try:
             obj_path = params.get('collection')
-            if ir.exists(path=obj_path) and ir.is_a_collection(obj_path=obj_path):
+            self.logger.info("obj_path: {}".format(obj_path))
+            self.logger.info("exists: {}".format(ir.exists(path=obj_path)))
+            self.logger.info("is a collection: {}".format(ir.is_a_collection(obj_path=obj_path)))
+
+            if ir.exists(path=obj_path)[0] and ir.is_a_collection(obj_path=obj_path):
                 collection = ir.get_object(src_path=obj_path)
             else:
                 collection = ir.create_object(dest_path=obj_path, collection=True)
@@ -301,9 +309,9 @@ class IrodsApiRestService(object):
             else:
                 res = dict(success='False', error=[], result=[])
         except Exception as e:
-            self.logger.error(str(e.message))
+            self.logger.error(str(e))
             #ir.cleanup()
-            res = dict(success='False', error=self.__str(e.message), result=[])
+            res = dict(success='False', error=self.__str(e), result=[])
 
         return res
 
@@ -313,7 +321,7 @@ class IrodsApiRestService(object):
         overwrite = strtobool(params.get('overwrite_if_exists', 'False'))
         try:
             irods_path = params.get('irods_path')
-            if not ir.exists(path=irods_path):
+            if not ir.exists(path=irods_path)[0]:
                 ir.put_object(source_path=params.get('local_path'), dest_path=irods_path)
             else:
                 if overwrite:
@@ -339,7 +347,9 @@ class IrodsApiRestService(object):
     def _iget(self, params):
         ir = self._iinit(params)
         try:
-            exists, iobj = ir.exists(params.get('irods_path'), delivery=True)
+            ret = ir.exists(params.get('irods_path'), delivery=True)
+            exists = ret[0]
+            iobj = ret[1]
             #ir.cleanup()
             if exists:
                 with iobj.open('r') as f:
@@ -394,7 +404,7 @@ class IrodsApiRestService(object):
                                 host=params.get('host'),
                                 password=params.get('password'),
                                 cmd=self._get_icmd(cmd=cmd, params=params))
-        self.logger.info(res)
+        #self.logger.info(res)
         return _run_info_parser(res)
 
     def _get_run_parameters(self, params, run):
@@ -455,7 +465,7 @@ class IrodsApiRestService(object):
                                 password=params.get('password'),
                                 cmd=self._get_icmd(cmd=cmd, params=params))
 
-        self.logger.info(res)
+        #self.logger.info(res)
         return _run_parameters_parser(res)
 
     def __get_metadata(self, irods_obj):
@@ -470,7 +480,7 @@ class IrodsApiRestService(object):
             return retrieve_imetadata(irods_obj)
         else:
             for d in irods_obj.data_objects:
-                if "SampleSheet.csv" in d.name and len(d.metadata.items()) > 0:
+                if "SampleSheet" in d.name and len(d.metadata.items()) > 0:
                     return retrieve_imetadata(d)
 
     def __get_qc_summary(self, base_url):
