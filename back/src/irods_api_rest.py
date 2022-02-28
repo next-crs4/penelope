@@ -130,6 +130,22 @@ class IrodsApiRestService(object):
         return dict(objects=samplesheet, success=res.get('success'), error=res.get('error'))
 
     @wrap_default
+    def rm_samplesheet(self):
+        self.logger.info("Removing Samplesheet")
+        params = self._get_params(request.forms)
+
+        rundir_collection = params.get('samplesheet_collection')
+        rundir = params.get('run')
+        ipath = params.get('path')
+        ssheet = params.get('ssheet', 'SampleSheet.csv')
+        irods_path = os.path.join(ipath, ssheet) if ipath else os.path.join(rundir_collection, rundir, ssheet)
+        params.update(dict(irods_path=irods_path))
+
+        res = self._irm(params)
+        self.logger.info(irods_path + " - success: {} - error: {}".format(res.get('success'),res.get('error')))
+        return dict(objects=res.get('result'), success=res.get('success'), error=res.get('error'))
+
+    @wrap_default
     def sync_batchbook(self):
         self.logger.info("Synchronizing batchbook")
         params = self._get_params(request.forms)
@@ -341,6 +357,26 @@ class IrodsApiRestService(object):
             self.logger.error(str(e.message))
             #ir.cleanup()
             res = dict(success='False', error=self.__str(e.message), result=[])
+
+        return res
+
+    def _irm(self, params):
+        ir = self._iinit(params)
+        obj_path = params.get('irods_path')
+        try:
+            ret = ir.exists(obj_path)
+            exists = ret[0]
+            # ir.cleanup()
+            if exists:
+                success = ir.remove_object(obj_path)
+                if success:
+                    res = dict(success='True', error=[], result=[])
+                else:
+                    res = dict(success='False', error=[], result=[])
+        except Exception as e:
+            self.logger.error(str(e.message))
+            # ir.cleanup()
+            res = dict(success='False', error=[], result=[])
 
         return res
 

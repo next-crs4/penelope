@@ -5,10 +5,15 @@ runs_module.run(function($rootScope){
 });
 
 runs_module.controller('RunsCtrl',
-	function(BikaService, IrodsService, Utility, config, $scope, $rootScope, $http) {
+	function(BikaService, IrodsService, Utility, config, $scope, $state, $rootScope, $http) {
 
 		$scope.loading_search = Utility.loading({
             busyText: 'Wait while searching ngs runs...',
+            delayHide: 1500,
+        });
+
+        $scope.removing_samplesheet = Utility.loading({
+            busyText: 'Wait while removing SampleSheet...',
             delayHide: 1500,
         });
 
@@ -76,8 +81,22 @@ runs_module.controller('RunsCtrl',
                 });
 		}
 
+		this.remove_samplesheet = function(run, path, ssheet) {
+		    $scope.removing_samplesheet.show();
+			this.params = {run: run, path: path, ssheet: ssheet};
+			IrodsService.rmSamplesheet(this.params).success(function (data, status, header, config){
+                $scope.removing_samplesheet.hide();
+                $scope.getRuns();
+            });
+		}
+
 		this.get_filename = function() {
-			return $scope.attachment.ssheet.startsWith('SampleSheet') ? $scope.attachment.run + ".csv" : $scope.attachment.run + "-" +  $scope.attachment.ssheet
+		    if ($scope.attachment.ssheet != undefined) {
+                return $scope.attachment.ssheet.startsWith('SampleSheet') ? $scope.attachment.run + ".csv" : $scope.attachment.run + "-" +  $scope.attachment.ssheet
+		    }
+		    else {
+		        return ''
+		    }
 		}
 
 		this.hide = true;

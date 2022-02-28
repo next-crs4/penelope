@@ -123,6 +123,7 @@ angular
         		sync_batchbook: '/irods/sync/batchbook',
         		put_samplesheet: '/irods/put/samplesheet',
         		get_samplesheet: '/irods/get/samplesheet',
+        		rm_samplesheet: '/irods/cancel/samplesheet',
         	}
         },
         legend: {

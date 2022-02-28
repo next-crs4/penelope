@@ -191,6 +191,7 @@ class IrodsObjectStore(object):
             self.logger.error("Object missing")
             session.cleanup()
             return False
+        session.cleanup()
         return True
 
     def add_object_metadata(self, path, meta):

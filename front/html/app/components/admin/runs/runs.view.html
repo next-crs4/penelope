@@ -125,7 +125,14 @@
                                         data-placement="right" data-effect="from-right" data-qs-title="'Show Samplesheet'"
                                         ng-click="ctrl.show_samplesheet(row.run, row.path, f)">
                                         <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button>&nbsp;
+                                    </button>
+                                    <button type="button"
+                                        class="pull-left btn btn-danger btn-xs"
+                                        data-qs-title="'Remove Samplesheet'"
+                                        ng-click="ctrl.remove_samplesheet(row.run, row.path, f)">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                    &nbsp;
                                     <span class="small">{{f.replace('SampleSheet-','')}}</span>
                                 </div>
 

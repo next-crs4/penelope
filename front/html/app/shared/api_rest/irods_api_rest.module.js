@@ -56,6 +56,16 @@ irods_api_rest_module.service('IrodsService', function(IrodsApiRestService, init
         return IrodsApiRestService.call('read',this.method, this.params);
     }
 
+     this.rmSamplesheet = function(params) {
+
+		this.params = (params !== undefined)?params:{}
+        _.extend(this.params,init.sshApiRest);
+        _.extend(this.params,init.irodsApiRest);
+
+    	this.method = config.irodsApiRest.methods.rm_samplesheet;
+        return IrodsApiRestService.call('read',this.method, this.params);
+    }
+
     this.getRuns = function(params) {
 
 		this.params = (params !== undefined)?params:{}

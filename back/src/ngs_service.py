@@ -109,6 +109,7 @@ class BikaService(object):
         post('/irods/sync/batchbook')(irodsApi.sync_batchbook)
         post('/irods/put/samplesheet')(irodsApi.put_samplesheet)
         post('/irods/get/samplesheet')(irodsApi.get_samplesheet)
+        post('/irods/cancel/samplesheet')(irodsApi.rm_samplesheet)
 
         # check status
         post('/web/check/status')(self.test_server)
