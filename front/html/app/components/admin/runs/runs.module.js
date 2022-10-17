@@ -7,9 +7,9 @@ runs_module.run(function($rootScope){
 runs_module.controller('RunsCtrl',
 	function(BikaService, IrodsService, Utility, config, $scope, $state, $rootScope, $http) {
 
-		$scope.loading_search = Utility.loading({
+		$scope.loading_search_runs = Utility.loading({
             busyText: 'Wait while searching ngs runs...',
-            delayHide: 1500,
+            delayHide: 2500,
         });
 
         $scope.removing_samplesheet = Utility.loading({
@@ -41,16 +41,16 @@ runs_module.controller('RunsCtrl',
 		// :: function :: getRuns()
         $scope.getRuns =
             function() {
-            	$scope.loading_search.show();
+            	$scope.loading_search_runs.show();
                 $scope.runs = [];
                 this.params = {sort_on: 'runs', sort_order: 'descending',
                 	page_nr: $scope.pagination.page_nr, page_size: $scope.pagination.page_size};
 				IrodsService.getRuns(this.params).success(function (data, status, header, config){
                     $scope.runs = data.result.objects;
+                    //console.log($scope.runs);
                     $scope.pagination.total = data.result.total;
                     $scope.pagination.last = data.result.last;
-					$scope.loading_search.hide();
-
+					$scope.loading_search_runs.hide();
                 });
             };
 
@@ -105,9 +105,9 @@ runs_module.controller('RunsCtrl',
 runs_module.controller('CheckCtrl',
 	function(BikaService, IrodsService, Utility, config, $scope, $rootScope, $http) {
 
-		$scope.loading_search = Utility.loading({
+		$scope.loading_check_runs = Utility.loading({
             busyText: 'Wait while checking ngs runs...',
-            delayHide: 1500,
+            delayHide: 2000,
         });
 
 		$scope.checks = [];
@@ -115,12 +115,12 @@ runs_module.controller('CheckCtrl',
 		// :: function :: checkRuns()
         $scope.checkRuns =
             function() {
-            	$scope.loading_search.show();
+            	$scope.loading_check_runs.show();
                 $scope.runs = [];
                 this.params = {sort_on: 'runs', sort_order: 'descending'};
 				IrodsService.checkRuns(this.params).success(function (data, status, header, config){
                     $scope.checks = data.result.objects;
-					$scope.loading_search.hide();
+					$scope.loading_check_runs.hide();
                 });
             };
 
@@ -143,8 +143,12 @@ runs_module.controller('RunDetailsCtrl',
             delayHide: 1500,
         });
 
+         $scope.removing_samplesheet = Utility.loading({
+            busyText: 'Wait while removing SampleSheet...',
+            delayHide: 1500,
+        });
         $scope.run = null;
-        $scope.samples = []
+        $scope.samples = [];
 		$scope.attachment = {content: null, run: null};
 
 		// :: function :: getRuns()
@@ -155,14 +159,24 @@ runs_module.controller('RunDetailsCtrl',
                 this.params = {rd_label: rd_label};
 				IrodsService.getRuns(this.params).success(function (data, status, header, config){
                     $scope.run = data.result.objects.pop();
-                    $scope.attachment = {content: null, run: null};
-					this.params = {run: $scope.run.run, path: $scope.run.path}
-					IrodsService.getSamplesheet(this.params).success(function (data, status, header, config){
-						   $scope.attachment.content = data.result.objects;
-						   $scope.attachment.run = $scope.run.run;
+                    _.each($scope.run.files, function(ssheet) {
+                        this.params = {run: $scope.run.run, path: $scope.run.path, ssheet: ssheet}
+                        IrodsService.getSamplesheet(this.params).success(function (data, status, header, config){
+                           $scope.attachment.content = data.result.objects;
+                           $scope.attachment.run = $scope.run.run;
+                           $scope.attachment.ssheet = ssheet.replace('SampleSheet-','');
 					       $scope.getSamples($scope.attachment.content);
 					       $scope.loading_search.hide();
-					});
+                        });
+                    });
+//					this.params = {run: $scope.run.run, path: $scope.run.path}
+//					IrodsService.getSamplesheet(this.params).success(function (data, status, header, config){
+//					       console.log(data.result.objects);
+//						   $scope.attachment.content = data.result.objects;
+//						   $scope.attachment.run = $scope.run.run;
+//					       $scope.getSamples($scope.attachment.content);
+//					       $scope.loading_search.hide();
+//					});
 
                 });
             };
@@ -196,8 +210,7 @@ runs_module.controller('RunDetailsCtrl',
             			ar['lanes'] = samples[ar['id']];
             			sample_list.push(ar);
             		});
-            		$scope.samples = sample_list;
-
+            		$scope.samples = [...$scope.samples, ...sample_list];
             });
         }
 
@@ -212,6 +225,24 @@ runs_module.controller('RunDetailsCtrl',
 
 		}
 
+        this.show_samplesheet = function(run, path, ssheet) {
+			$scope.attachment = {content: null, run: null, ssheet: null};
+			this.params = {run: run, path: path, ssheet: ssheet}
+			IrodsService.getSamplesheet(this.params).success(function (data, status, header, config){
+                   $scope.attachment.content = data.result.objects;
+                   $scope.attachment.run = run;
+                   $scope.attachment.ssheet = ssheet.replace('SampleSheet-','');
+                });
+		}
+
+		this.remove_samplesheet = function(run, path, ssheet) {
+		    $scope.removing_samplesheet.show();
+			this.params = {run: run, path: path, ssheet: ssheet};
+			IrodsService.rmSamplesheet(this.params).success(function (data, status, header, config){
+                $scope.removing_samplesheet.hide();
+                $scope.getRuns();
+            });
+		}
 
 
 		this.get_filename = function() {
