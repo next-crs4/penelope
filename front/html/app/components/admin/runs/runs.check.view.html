@@ -27,11 +27,11 @@
                         <th ng-click="sort('samplesheet')">Samplesheet
                             <span class="glyphicon sort-icon" ng-show="sortKey=='samplesheet'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                         </th>
-                        <th ng-click="sort('barcodes')">Barcodes
-                            <span class="glyphicon sort-icon" ng-show="sortKey=='barcodes'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-                        </th>
                         <th ng-click="sort('metadata')">Metadata
                             <span class="glyphicon sort-icon" ng-show="sortKey=='metadata'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('barcodes')">PreProcessing
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='preprocessing'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                         </th>
                     </tr>
                     </thead>
@@ -49,8 +49,8 @@
                         <td>{{row.status}}</td>
                         <td>{{row.ownership}}</td>
                         <td>{{row.samplesheet}}</td>
-                        <td>{{row.barcodes}}</td>
                         <td>{{row.metadata}}</td>
+                        <td>{{row.preprocessing}}</td>
                     </tr>
                     </tbody>
                 </table>

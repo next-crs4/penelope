@@ -120,6 +120,7 @@ runs_module.controller('CheckCtrl',
                 this.params = {sort_on: 'runs', sort_order: 'descending'};
 				IrodsService.checkRuns(this.params).success(function (data, status, header, config){
                     $scope.checks = data.result.objects;
+					console.log($scope.checks);
 					$scope.loading_check_runs.hide();
                 });
             };

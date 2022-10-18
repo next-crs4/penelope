@@ -39,11 +39,11 @@ class IrodsApiRestService(object):
             ]
         )
         self.positive_labels = ['finished', "ownership ok",
-                                'SampleSheet found', 'Barcodes have the same size',
+                                'SampleSheet(s) found',
                                 'Metadata found']
 
         self.negative_labels = ['running ', "waiting for ownership's modification",
-                                'SampleSheet not found',"Barcodes don't have the same size",
+                                'SampleSheet(s) found',
                                 'Metadata not found']
         self.logger = logger
 
@@ -171,18 +171,20 @@ class IrodsApiRestService(object):
                             switch=True)
         result = list()
         indices = [i for i, s in enumerate(res['result']) if 'Rundir'.encode('utf8') in s]
+        self.logger.info(res['result'])
         for i in indices:
             rundir = res['result'][i].split(b'|')[3].split(b' ')[1]
             check_res = res['result'][i + 1].split(b'|')[3]
+            check_res[3] = 'SampleSheet(s) found' if 'SampleSheet(s) found:' in check_res[3] else 'SampleSheet(s) not found'
             check_res = ast.literal_eval(check_res.decode('utf-8'))
             result.extend([dict(
                 run=rundir,
                 status=check_res[0],
                 ownership=check_res[1],
                 samplesheet=check_res[2],
-                barcodes=check_res[3],
-                metadata=check_res[4],
-                ready="True" if set(check_res) == set(self.positive_labels) else "False",
+                metadata=check_res[3],
+                preprocessing=check_res[4],
+                ready="True" if set(check_res[0:4]) == set(self.positive_labels) else "False",
             )])
         self.logger.info("Runs: {} - success: {} - error: {}".format(len(result),
                                                                      res.get('success'),
